@@ -1,0 +1,920 @@
+import React, { useState, useRef, useEffect } from 'react';
+
+// --- ICONS (Recreated to match the new design) ---
+const DashboardIcon = ({ className = "w-6 h-6" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 3H4C3.44772 3 3 3.44772 3 4V10C3 10.5523 3.44772 11 4 11H10C10.5523 11 11 10.5523 11 10V4C11 3.44772 10.5523 3 10 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M20 3H14C13.4477 3 13 3.44772 13 4V10C13 10.5523 13.4477 11 14 11H20C20.5523 11 21 10.5523 21 10V4C21 3.44772 20.5523 3 20 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 13H4C3.44772 13 3 13.4477 3 14V20C3 20.5523 3.44772 21 4 21H10C10.5523 21 11 20.5523 11 20V14C11 13.4477 10.5523 13 10 13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M20 13H14C13.4477 13 13 13.4477 13 14V20C13 20.5523 13.4477 21 14 21H20C20.5523 21 21 20.5523 21 20V14C21 13.4477 20.5523 13 20 13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const ComputeIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.6183 6.38166L19.7396 4.26038" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M6.38166 17.6183L4.26038 19.7396" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 18V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 3V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M17.6183 17.6183L19.7396 19.7396" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M6.38166 6.38166L4.26038 4.26038" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M18 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 12H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const ConditionsIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 3V7C14 7.26522 14.1054 7.51957 14.2929 7.70711C14.4804 7.89464 14.7348 8 15 8H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M17 21H7C6.46957 21 5.96086 20.7893 5.58579 20.4142C5.21071 20.0391 5 19.5304 5 19V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H14L19 8V19C19 19.5304 18.7893 20.0391 18.4142 20.4142C18.0391 20.7893 17.5304 21 17 21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 12H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 16H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const EventsIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2V5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M16 2V5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M3.5 9.08997H20.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 8.5V17C21 18.1046 20.1046 19 19 19H5C3.89543 19 3 18.1046 3 17V8.5C3 7.39543 3.89543 6.5 5 6.5H19C20.1046 6.5 21 7.39543 21 8.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M7 13H7.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 13H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M17 13H17.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const OrchestrationIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 12H13.5C14.0523 12 14.5 11.5523 14.5 11V7C14.5 6.44771 14.9477 6 15.5 6H17.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 12H13.5C14.0523 12 14.5 12.4477 14.5 13V17C14.5 17.5523 14.9477 18 15.5 18H17.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const SettingsIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M19.4 15L19.4 15C19.781 14.3331 20.219 13.6669 20.6 13C21.3331 11.781 21.3331 10.219 20.6 9C20.219 8.33313 19.781 7.66687 19.4 7L19.4 7C19.0669 6.21901 18.3331 5.78099 17.6 5.4L17.6 5.4C16.3331 4.98101 15.6669 4.21901 15 4.6C14.3331 4.21901 13.6669 4.98101 13 5.4L13 5.4C12.219 5.78099 11.781 6.21901 11.4 7L11.4 7C11.019 7.66687 10.581 8.33313 10 9C9.26687 10.219 9.26687 11.781 10 13C10.581 13.6669 11.019 14.3331 11.4 15L11.4 15C11.781 15.781 12.219 16.219 13 16.6L13 16.6C13.6669 17.019 14.3331 17.781 15 17.4C15.6669 17.781 16.3331 17.019 17.6 16.6L17.6 16.6C18.3331 16.219 19.0669 15.781 19.4 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const AccessIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 7C15 5.34315 13.6569 4 12 4C10.3431 4 9 5.34315 9 7C9 8.65685 10.3431 10 12 10C13.6569 10 15 8.65685 15 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 15C10.3431 15 9 16.3431 9 18V20H15V18C15 16.3431 13.6569 15 12 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const SearchConfigIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 3V7C14 7.26522 14.1054 7.51957 14.2929 7.70711C14.4804 7.89464 14.7348 8 15 8H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M17 21H7C6.46957 21 5.96086 20.7893 5.58579 20.4142C5.21071 20.0391 5 19.5304 5 19V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H14L19 8V19C19 19.5304 18.7893 20.0391 18.4142 20.4142C18.0391 20.7893 17.5304 21 17 21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="11.5" cy="14.5" r="2.5" stroke="currentColor" strokeWidth="2"/><path d="M13.5 16.5L15.5 18.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+);
+
+const FilterIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+);
+
+const LogoutIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 17L21 12L16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const SearchIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const BellIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 22.0001 12 22C11.6496 22.0001 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const SparklesIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L14.32 7.68L19 10L14.32 12.32L12 17L9.68 12.32L5 10L9.68 7.68L12 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 21L6.6 18.4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M17.4 18.4L19 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const UserCircleIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const PlusIcon = ({ className="w-4 h-4" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 12H19" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const XIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+);
+
+const SendIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const CheckCircleIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.08V12C22 16.97 16.97 22 12 22C7.03 22 2 16.97 2 12C2 7.03 7.03 2 12 2C12.83 2 13.63 2.1 14.39 2.28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M22 4L12 14.01L9 11.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const EditIcon = ({className="w-4 h-4"}) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
+const SidebarCollapseIcon = ({ className="w-6 h-6" }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+    </svg>
+);
+
+// --- NEW CHAT ICONS ---
+const ChatBubbleIcon = ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+const ArrowUpIcon = ({ className = "w-5 h-5" }) => <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 19V5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 12l7-7 7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+const UploadIcon = ({ className = "w-5 h-5" }) => <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><polyline points="17 8 12 3 7 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+const PolicyIcon = ({ className = "w-5 h-5" }) => <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><polyline points="14 2 14 8 20 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+const NoteIcon = ({ className = "w-5 h-5" }) => <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><polyline points="13 2 13 9 20 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+
+// --- NEW COMPUTE PAGE & SIDEBAR ICONS ---
+const ArrowUpDownIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" /></svg>;
+const FlaskConicalIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M14.25 5.25L12 2.25l-2.25 3h4.5zM6.75 6v.75H17.25V6H6.75zM8.25 9.75h7.5v6L12 21.75l-3.75-6v-6z" /></svg>;
+const ChevronRightIcon = ({ className = "w-5 h-5" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>;
+const ChevronLeftIcon = ({ className = "w-5 h-5" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>;
+const ChevronDownIcon = ({ className = "w-5 h-5" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>;
+const Trash2Icon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6" /></svg>;
+const AlertCircleIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>;
+const InfoIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const DownloadIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>;
+const ClockIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const SaveIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3l-4-4-4 4z" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 100-6 3 3 0 000 6z" /></svg>;
+const CopyIcon = ({ className = "w-3 h-3" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
+const FileTextIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>;
+const CalculatorIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m-3 7v3m-3-3h.01M9 14h.01M12 14h.01M15 14h.01M9 17h.01M12 17h.01M15 17h.01M5 21V5a2 2 0 012-2h10a2 2 0 012 2v16l-3-3-4 4-4-4-3 3z" /></svg>;
+const Code2Icon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>;
+const PaperclipIcon = ({ className = "w-4 h-4" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>;
+
+
+// --- MOCK DATA ---
+const mockNotifications = [ { id: 1, text: 'Rule "Customer Validation" has been successfully deployed', time: '2:30 PM・Today' }, { id: 2, text: 'System configuration updated for production environment.', time: '1:15 PM・Today' }, { id: 3, text: 'New event trigger "Order Processing" has been created', time: '11:45 AM・Today' }, ];
+
+const allSearchableItems = [
+    { id: 'cond1', name: 'Premium User Check', type: 'Conditions', modified: '2 hours ago', summary: 'Checks if user.subscription == "premium".', project: 'User Management', status: 'active' },
+    { id: 'cond2', name: 'Age Verification', type: 'Conditions', modified: '3 days ago', summary: 'Ensures user.age >= 18.', project: 'User Management', status: 'draft' },
+    { id: 'comp1', name: 'Final Premium Calculation', type: 'Compute', modified: '1 day ago', summary: '`base_premium * risk_factor`', project: 'Billing', status: 'active' },
+    { id: 'evt1', name: 'New User Signup', type: 'Events', modified: '5 hours ago', summary: 'Triggers on `user.created` event.', project: 'User Management', status: 'active' },
+    { id: 'orch1', name: 'Onboarding Flow', type: 'Orchestrations', modified: '2 days ago', summary: 'Coordinates all steps for new user onboarding.', project: 'User Management', status: 'draft' },
+    { id: 'party1', name: 'Jane Smith (Agent)', type: 'Party', modified: '1 year ago', summary: 'Top performing agent in Q4', project: 'Sales', status: 'active' },
+    { id: 'policy1', name: 'Auto Insurance Policy GA-2024', type: 'Policy', modified: '1 week ago', summary: 'Standard auto policy for Georgia', project: 'Insurance', status: 'active' },
+    { id: 'client1', name: 'John Doe', type: 'Client', modified: '6 months ago', summary: 'Active client since 2023', project: 'Sales', status: 'active' },
+    { id: 'notes1', name: 'Note on Age Verification', type: 'Notes', modified: '1 day ago', summary: 'Need to add check for international users.', project: 'User Management', status: 'draft' },
+];
+
+const mockData = {
+    Dashboard: [],
+    Compute: allSearchableItems.filter(i => i.type === 'Compute'),
+    Conditions: allSearchableItems.filter(i => i.type === 'Conditions'),
+    Events: allSearchableItems.filter(i => i.type === 'Events'),
+    Orchestrations: allSearchableItems.filter(i => i.type === 'Orchestrations'),
+    Party: allSearchableItems.filter(i => i.type === 'Party'),
+    Policy: allSearchableItems.filter(i => i.type === 'Policy'),
+    Client: allSearchableItems.filter(i => i.type === 'Client'),
+    Notes: allSearchableItems.filter(i => i.type === 'Notes'),
+    'Search Configuration': [], Access: [], Settings: [], 'Functional Access': [], Help: [],
+};
+
+
+// --- REUSABLE COMPONENTS ---
+const NavItem = ({ icon, label, active, onClick, isCollapsed }) => (
+    <button onClick={onClick} className={`flex items-center w-full py-2.5 text-sm rounded-lg transition-colors duration-200 ${isCollapsed ? 'px-3 justify-center' : 'px-4'} ${ active ? 'bg-gray-200 text-gray-900 font-semibold' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 font-medium' }`}>
+        {React.cloneElement(icon, { className: 'w-5 h-5 shrink-0' })}
+        <span className={`ml-3 whitespace-nowrap transition-opacity duration-200 ${isCollapsed ? 'opacity-0 hidden' : 'opacity-100'}`}>{label}</span>
+    </button>
+);
+
+const AiPromptCard = ({ icon, text }) => (
+    <div className="bg-gray-50/80 hover:bg-white border border-gray-200/80 hover:border-gray-300 p-4 rounded-lg transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md group">
+        <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{text}</p>
+        <div className="mt-3 text-gray-400 group-hover:text-indigo-500 transition-colors duration-300">
+            {icon}
+        </div>
+    </div>
+);
+
+
+// --- LAYOUT COMPONENTS ---
+
+const Sidebar = ({ activeItem, setActiveItem, openModal, isCollapsed, setSidebarCollapsed, setEditingItem }) => (
+    <aside className={`fixed inset-y-0 left-0 z-30 bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+        <div className={`flex items-center gap-3 h-16 px-4 border-b border-gray-200 shrink-0 ${isCollapsed ? 'justify-center' : ''}`}>
+            <div className="w-9 h-9 flex items-center justify-center bg-gray-900 text-white font-bold rounded-lg text-lg shrink-0">M</div>
+            <div className={`overflow-hidden transition-all duration-200 ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+                <h1 className="text-sm font-bold text-gray-900 whitespace-nowrap">Mint Inc</h1>
+                <p className="text-xs text-gray-500 whitespace-nowrap">Configuration Platform</p>
+            </div>
+        </div>
+        <nav className="flex-1 p-2 space-y-1 overflow-y-auto">
+            <NavItem label="Dashboard" icon={<DashboardIcon />} active={activeItem === 'Dashboard'} onClick={() => { setActiveItem('Dashboard'); setEditingItem(null); }} isCollapsed={isCollapsed} />
+            <NavItem label="Compute" icon={<ComputeIcon />} active={activeItem === 'Compute'} onClick={() => openModal(mockData.Compute, 'Compute')} isCollapsed={isCollapsed} />
+            <NavItem label="Conditions" icon={<ConditionsIcon />} active={activeItem === 'Conditions'} onClick={() => openModal(mockData.Conditions, 'Conditions')} isCollapsed={isCollapsed} />
+            <NavItem label="Events" icon={<EventsIcon />} active={activeItem === 'Events'} onClick={() => openModal(mockData.Events, 'Events')} isCollapsed={isCollapsed} />
+            <NavItem label="Orchestrations" icon={<OrchestrationIcon />} active={activeItem === 'Orchestrations'} onClick={() => openModal(mockData.Orchestrations, 'Orchestrations')} isCollapsed={isCollapsed} />
+            <div className={`pt-4 pb-2 ${isCollapsed ? 'px-2' : 'px-4'}`}><div className={`h-px bg-gray-200 ${isCollapsed ? 'hidden' : ''}`}></div><div className={`text-center text-gray-400 ${isCollapsed ? '' : 'hidden'}`}>* * *</div></div>
+            <div className={`px-4 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider ${isCollapsed ? 'hidden' : ''}`}>System</div>
+            <NavItem label="Settings" icon={<SettingsIcon />} active={activeItem === 'Settings'} onClick={() => { setActiveItem('Settings'); setEditingItem(null); }} isCollapsed={isCollapsed} />
+            <NavItem label="Functional Access" icon={<AccessIcon />} active={activeItem === 'Functional Access'} onClick={() => { setActiveItem('Functional Access'); setEditingItem(null); }} isCollapsed={isCollapsed} />
+            <NavItem label="Search Configuration" icon={<SearchConfigIcon />} active={activeItem === 'Search Configuration'} onClick={() => { setActiveItem('Search Configuration'); setEditingItem(null); }} isCollapsed={isCollapsed} />
+        </nav>
+        <div className="p-2 border-t border-gray-200 shrink-0">
+             <div className={`flex items-center gap-3 p-2 rounded-lg ${isCollapsed ? 'justify-center' : ''}`}>
+                 <div className="w-9 h-9 flex items-center justify-center bg-indigo-100 text-indigo-600 font-bold rounded-full text-sm shrink-0">HN</div>
+                 <div className={`overflow-hidden transition-all duration-200 ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}><p className="text-sm font-semibold text-gray-900 whitespace-nowrap">Harper Nelson</p><p className="text-xs text-gray-500 whitespace-nowrap">Admin Manager</p></div>
+            </div>
+            <button className={`mt-1 w-full flex items-center py-2.5 text-sm text-gray-500 font-medium hover:bg-gray-100 hover:text-gray-900 rounded-lg ${isCollapsed ? 'px-3 justify-center' : 'px-4'}`}>
+                <LogoutIcon className="w-5 h-5 shrink-0" /><span className={`ml-3 whitespace-nowrap transition-opacity duration-200 ${isCollapsed ? 'opacity-0 hidden' : 'opacity-100'}`}>Log out</span>
+            </button>
+            <div className="mt-2 pt-2 border-t border-gray-200">
+                <button onClick={() => setSidebarCollapsed(prev => !prev)} className={`w-full flex items-center py-2.5 text-sm text-gray-500 font-medium hover:bg-gray-100 hover:text-gray-900 rounded-lg ${isCollapsed ? 'px-3 justify-center' : 'px-4'}`}>
+                    {isCollapsed ? <ChevronRightIcon className="w-5 h-5 shrink-0" /> : <ChevronLeftIcon className="w-5 h-5 shrink-0" />}
+                    <span className={`ml-3 whitespace-nowrap transition-opacity duration-200 ${isCollapsed ? 'opacity-0 hidden' : 'opacity-100'}`}>Collapse</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+);
+
+const TopBar = ({ openNotifications, setMobileNavOpen, title, searchRef, onSearchFocus, onSearchKeyDown, searchTerm, setSearchTerm, onFilterToggle, editingItem }) => (
+    <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md h-16 border-b border-gray-200">
+        <div className="flex items-center justify-between h-full px-4 sm:px-6">
+            <div className="flex items-center gap-2">
+                <button onClick={() => setMobileNavOpen(true)} className="p-2.5 text-gray-500 hover:text-gray-900 lg:hidden"><SidebarCollapseIcon className="h-5 w-5" /></button>
+                <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+            </div>
+
+            {/* Universal Search Bar */}
+            <div className="flex-1 flex justify-center px-4">
+                <div ref={searchRef} className="relative w-full max-w-xl">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                        <SearchIcon className="w-5 h-5" />
+                    </div>
+                    <input 
+                        type="text"
+                        placeholder="Search or ask AI... (Enter to search)"
+                        className="w-full h-10 pl-10 pr-10 bg-gray-100 border border-transparent rounded-lg text-sm focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={onSearchKeyDown}
+                        onFocus={onSearchFocus}
+                    />
+                     <button onClick={onFilterToggle} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md text-gray-500 hover:bg-gray-200 hover:text-gray-800 transition-colors">
+                        <FilterIcon className="w-5 h-5" />
+                    </button>
+                </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+                {editingItem && (
+                    <button className="flex items-center space-x-2 px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-semibold">
+                        <SaveIcon className="w-4 h-4" />
+                        <span className="hidden sm:inline">Save</span>
+                    </button>
+                )}
+                <button onClick={openNotifications} className="p-2.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg relative"><BellIcon className="w-5 h-5" /><span className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full"></span></button>
+                <button className="p-2.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg"><UserCircleIcon className="w-5 h-5" /></button>
+            </div>
+        </div>
+    </header>
+);
+
+const AiDashboard = () => {
+    const [greeting, setGreeting] = useState('');
+    useEffect(() => {
+        const hour = new Date().getHours();
+        if (hour < 12) setGreeting('Good Morning');
+        else if (hour < 18) setGreeting('Good Afternoon');
+        else setGreeting('Good Evening');
+    }, []);
+
+    return (
+        <main className="p-4 sm:p-6 lg:p-12 flex flex-col items-center justify-center text-center flex-1 animate-fade-in bg-white">
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-tr from-purple-400 to-indigo-600 rounded-full opacity-10 blur-3xl animate-pulse-slow"></div>
+            <div className="relative z-10 w-full max-w-2xl">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full shadow-lg animate-float"></div>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">{greeting}, Harper</h1>
+                <p className="mt-2 text-lg sm:text-xl md:text-2xl text-gray-600">What's on your mind?</p>
+                <div className="mt-8 w-full relative"><textarea rows="3" placeholder="Ask the AI a question or make a request..." className="w-full p-4 pl-12 pr-28 text-base text-gray-800 bg-white/60 border-2 border-gray-200/80 rounded-xl shadow-md focus:ring-2 focus:ring-indigo-500 focus:outline-none backdrop-blur-sm transition-all resize-none" /><div className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"><SparklesIcon className="w-6 h-6" /></div><button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"><SendIcon className="w-5 h-5" /></button></div>
+                 <div className="mt-12 text-left">
+                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Get started with an example</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <AiPromptCard text="Create a new rule for customer validation" icon={<OrchestrationIcon className="w-6 h-6" />} />
+                        <AiPromptCard text="Generate a calculation for premium adjustments" icon={<ComputeIcon className="w-6 h-6" />} />
+                        <AiPromptCard text="Draft an event that triggers on new user sign-up" icon={<EventsIcon className="w-6 h-6" />} />
+                        <AiPromptCard text="Build an orchestration for the entire user onboarding flow" icon={<OrchestrationIcon className="w-6 h-6" />} />
+                    </div>
+                </div>
+            </div>
+        </main>
+    );
+};
+
+const GenericPagePlaceholder = ({ pageTitle }) => (
+    <main className="p-4 sm:p-6 bg-gray-50 flex-1"><div className="max-w-7xl mx-auto"><h1 className="text-2xl font-semibold text-gray-800">{pageTitle}</h1><p className="mt-1 text-gray-500">Content for this page is under construction.</p></div></main>
+);
+
+const ListModal = ({ isOpen, content, onClose, onSelectItem }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    if (!isOpen) return null;
+
+    const { title, items } = content;
+
+    const filteredItems = items.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const StatusBadge = ({ status }) => {
+        const base = "px-2 py-0.5 text-xs font-semibold rounded-full";
+        const color = status === 'active' ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600";
+        return <span className={`${base} ${color}`}>{status}</span>
+    }
+    
+    return (
+        <div className="fixed inset-0 bg-black/30 z-40 flex items-center justify-center p-4" onClick={onClose}>
+            <div className="bg-white rounded-lg shadow-2xl w-full max-w-xl" onClick={e => e.stopPropagation()}>
+                <div className="flex items-center justify-between p-4 border-b border-gray-200"><div className="flex items-center gap-3"><ComputeIcon className="w-5 h-5 text-gray-500" /><h3 className="text-base font-semibold text-gray-900">{title}</h3></div><button onClick={onClose} className="p-1 rounded-full hover:bg-gray-200"><XIcon className="w-5 h-5 text-gray-500" /></button></div>
+                <div className="p-4 border-b border-gray-200"><div className="relative"><SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" /><input type="text" placeholder={`Search ${title.toLowerCase()}...`} className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} /></div></div>
+                <ul className="p-2 max-h-[50vh] overflow-y-auto">{filteredItems.length > 0 ? filteredItems.map(item => (<li key={item.id} onClick={() => onSelectItem(item)} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer"><div className="flex items-center justify-between"><div><p className="text-sm font-medium text-gray-800">{item.name}</p><p className="text-sm text-gray-500">{item.summary}</p><p className="text-xs text-gray-400 mt-1">Last modified {item.modified}</p></div><StatusBadge status={item.status} /></div></li>)) : (<li className="p-8 text-center text-sm text-gray-500">No items match your search.</li>)}</ul>
+                <div className="p-4 border-t border-gray-200"><button className="w-full py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 flex items-center justify-center gap-2"><PlusIcon className="w-4 h-4" />Create New {title ? title.slice(0, -1) : ''}</button></div>
+            </div>
+        </div>
+    )
+};
+
+const NotificationsPanel = ({ isOpen, closePanel }) => {
+    const panelRef = useRef(null);
+    useEffect(() => {
+        const handleClickOutside = (event) => { if (panelRef.current && !panelRef.current.contains(event.target)) { closePanel(); } };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [closePanel]);
+
+    if (!isOpen) return null;
+    return (
+        <div ref={panelRef} className="absolute top-16 right-4 sm:right-6 w-full max-w-sm sm:w-80 bg-white border border-gray-200 rounded-lg shadow-xl z-20">
+            <div className="p-4 border-b border-gray-200"><h3 className="font-semibold text-sm text-gray-900">Recent Activity</h3></div>
+            <ul className="py-2 max-h-80 overflow-y-auto">{mockNotifications.map(n => (<li key={n.id} className="flex gap-4 px-4 py-3 hover:bg-gray-50"><CheckCircleIcon className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" /><div><p className="text-sm text-gray-700">{n.text}</p><p className="text-xs text-gray-500 mt-1">{n.time}</p></div></li>))}</ul>
+        </div>
+    )
+};
+
+const ChatModal = ({ isOpen, closeChatbot, context }) => {
+    const fileInputRef = useRef(null);
+    const handleUploadClick = () => fileInputRef.current.click();
+    const getContextContent = () => {
+        switch(context) {
+            case 'Compute': return { title: "AI Assistant for Compute", results: { intro: "Here's how I can help with 'Compute':", points: [ "Draft a new calculation script based on your requirements.", "Explain the logic of an existing calculation.", "Generate test cases for your formulas.", "Optimize a complex calculation for performance." ] } };
+            case 'Conditions': return { title: "AI Assistant for Conditions", results: { intro: "Here's how I can assist with 'Conditions':", points: [ "Create a condition to check for premium users.", "Write a rule to verify a user's age from their profile.", "Combine multiple conditions into a single rule.", "Suggest conditions based on common use cases." ] } };
+            default: return { title: "AI Assistant", results: { intro: "How can I help you today?", points: [ "Create a new rule, calculation, or event.", "Explain a feature of the platform.", "Help you find specific configuration items." ] } };
+        }
+    };
+    const content = getContextContent();
+
+    return (
+        <div className={`fixed inset-0 z-50 transition-colors duration-300 ${isOpen ? 'bg-black/20' : 'bg-transparent pointer-events-none'}`} onClick={closeChatbot}>
+            <div className={`fixed top-0 right-0 h-full bg-white shadow-2xl transition-transform duration-300 ease-out w-full max-w-lg ${isOpen ? 'translate-x-0' : 'translate-x-full'}`} onClick={e => e.stopPropagation()}>
+                <button onClick={closeChatbot} className="absolute top-4 right-4 p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors z-10"><XIcon className="w-6 h-6" /></button>
+                <div className="flex flex-col h-full">
+                    <div className="p-6 flex-grow overflow-y-auto">
+                        <div className="text-center mb-8 pt-8"><div className="inline-block w-16 h-16 p-1 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full"><div className="w-full h-full bg-white rounded-full flex items-center justify-center"><SparklesIcon className="w-8 h-8 text-purple-600" /></div></div><h2 className="text-xl font-bold text-gray-800 mt-4">{content.title}</h2></div>
+                        <div className="mb-8"><h3 className="flex items-center gap-2 text-sm font-semibold text-gray-600 mb-3"><SparklesIcon className="w-5 h-5" /> Suggestions</h3><div className="text-sm text-gray-700 prose prose-sm max-w-none"><p>{content.results.intro}</p><ul className="list-disc list-outside pl-5 space-y-1">{content.results.points.map((point, i) => <li key={i}>{point}</li>)}</ul></div></div>
+                    </div>
+                    <div className="p-4 border-t border-gray-200 bg-gray-50/50 shrink-0">
+                         <div className="flex items-center justify-start gap-2 mb-4"><input type="file" ref={fileInputRef} className="hidden" onChange={(e) => console.log(e.target.files[0])} /><button className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100" onClick={handleUploadClick}><UploadIcon /> Upload</button></div>
+                         <div className="relative">
+                            <input type="text" placeholder="Ask a follow-up question..." className="w-full pl-10 pr-12 py-3 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                            <SparklesIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-gray-800 text-white rounded-md hover:bg-gray-900"><ArrowUpIcon /></button>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- UNIFIED SEARCH POPOVER ---
+const UnifiedSearchPopover = ({ submittedSearchTerm, activeFilters, onFilterChange }) => {
+    
+    const filteredItems = allSearchableItems.filter(item => {
+        const searchTermMatch = submittedSearchTerm ? (item.name.toLowerCase().includes(submittedSearchTerm.toLowerCase()) || item.summary.toLowerCase().includes(submittedSearchTerm.toLowerCase())) : true;
+        if (!searchTermMatch && submittedSearchTerm) return false;
+
+        const filterMatch = activeFilters.length > 0 ? activeFilters.includes(item.type) : true;
+        return filterMatch;
+    });
+
+    const groupedItems = filteredItems.reduce((acc, item) => {
+        const { type } = item;
+        if (!acc[type]) acc[type] = [];
+        acc[type].push(item);
+        return acc;
+    }, {});
+    
+    const getIconForType = (type) => {
+        const icons = {
+            'Compute': <ComputeIcon className="w-4 h-4 text-gray-500" />,
+            'Conditions': <ConditionsIcon className="w-4 h-4 text-gray-500" />,
+            'Events': <EventsIcon className="w-4 h-4 text-gray-500" />,
+            'Orchestrations': <OrchestrationIcon className="w-4 h-4 text-gray-500" />,
+            'Party': <AccessIcon className="w-4 h-4 text-gray-500" />,
+            'Policy': <PolicyIcon className="w-4 h-4 text-gray-500" />,
+            'Client': <UserCircleIcon className="w-4 h-4 text-gray-500" />,
+            'Notes': <NoteIcon className="w-4 h-4 text-gray-500" />,
+        };
+        return icons[type] || null;
+    };
+
+    const filterOptions = ['Compute', 'Conditions', 'Events', 'Orchestrations', 'Party', 'Policy', 'Client', 'Notes'];
+    
+    return (
+        <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200/80 overflow-hidden" style={{maxHeight: '70vh'}}>
+            <div className="p-4 border-b border-gray-200">
+                <h3 className="text-sm font-semibold text-gray-800">Search Filters</h3>
+                <div className="flex flex-wrap gap-2 mt-2">
+                     {filterOptions.map(type => (
+                        <button key={type} onClick={() => onFilterChange(type)}
+                            className={`px-2.5 py-1 text-xs font-semibold rounded-full flex items-center gap-1.5 transition-colors ${activeFilters.includes(type) ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                            {getIconForType(type)}
+                            {type}
+                        </button>
+                    ))}
+                </div>
+            </div>
+            <div className="overflow-y-auto" style={{maxHeight: 'calc(70vh - 110px)'}}>
+                 <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                    <h3 className="text-sm font-semibold text-gray-800">Results {submittedSearchTerm && `for "${submittedSearchTerm}"`}</h3>
+                    <a href="#" className="text-xs font-semibold text-indigo-600 hover:underline">View All Results</a>
+                </div>
+                {Object.keys(groupedItems).length > 0 ? (
+                    Object.entries(groupedItems).map(([type, items]) => (
+                        <div key={type} className="p-4 border-b border-gray-200 last:border-b-0">
+                            <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">{type}</h4>
+                            <ul className="space-y-2">
+                                {items.map(item => (
+                                    <li key={item.id} className="p-2 rounded-lg hover:bg-gray-100 flex items-start gap-3 cursor-pointer">
+                                        {getIconForType(item.type)}
+                                        <div className="flex-grow">
+                                            <p className="text-sm font-medium text-gray-900">{item.name}</p>
+                                            <p className="text-xs text-gray-500">{item.project}</p>
+                                        </div>
+                                        <div className="text-right text-xs text-gray-400 shrink-0">
+                                            {item.modified}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                ) : (
+                    <div className="p-10 text-center text-gray-400">
+                        <h3 className="font-semibold text-gray-600">No Results Found</h3>
+                        <p className="text-sm">Try a different search term or adjust your filters.</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+// --- NEW COMPUTE PAGE COMPONENT ---
+const ComputePage = ({ item, setEditingItem }) => {
+    const [expandedSections, setExpandedSections] = useState({
+        configuration: true,
+        mapping: true
+    });
+    
+    // Configuration State
+    const [config, setConfig] = useState({
+        name: item.name || 'Interest Calculation',
+        category: 'Finance',
+        description: item.summary || 'Calculates simple and compound interest based on provided inputs.',
+        type: 'Excel',
+        fileName: 'interest_logic.xlsx'
+    });
+    const [errors, setErrors] = useState({});
+
+    // Mapping & Testing State
+    const [activeTab, setActiveTab] = useState('input');
+    
+    const [inputMappings, setInputMappings] = useState([
+        { id: 1, fieldName: 'principal', sheet: 'Sheet1', cell: 'B1', dataType: 'Number', status: 'mapped' },
+        { id: 2, fieldName: 'rate', sheet: 'Sheet1', cell: 'B2', dataType: 'Percentage', status: 'mapped' },
+        { id: 3, fieldName: 'time', sheet: 'Sheet1', cell: 'B3', dataType: 'Number', status: 'mapped' }
+    ]);
+
+    const [outputMappings, setOutputMappings] = useState([
+        { id: 1, fieldName: 'total_amount', sheet: 'Sheet1', cell: 'C5', dataType: 'Currency', status: 'mapped' }
+    ]);
+
+    const [draggedIndex, setDraggedIndex] = useState(null);
+
+    // Test State
+    const [testInputs, setTestInputs] = useState({
+        interest: '7',
+        principal: '10000',
+        time: '5'
+    });
+    const [testHistory, setTestHistory] = useState([
+        { id: 1, inputs: { interest: 7, principal: 10000, time: 5 }, result: 14025.52, timestamp: '2 min ago' },
+        { id: 2, inputs: { interest: 5, principal: 15000, time: 3 }, result: 17364.38, timestamp: '5 min ago' }
+    ]);
+
+    // --- LOGIC FUNCTIONS ---
+    const toggleSection = (section) => {
+        setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+    };
+    
+    const handleConfigChange = (e) => {
+        const { name, value } = e.target;
+        setConfig(prev => ({ ...prev, [name]: value }));
+        if (errors[name]) setErrors(prev => ({ ...prev, [name]: null }));
+    };
+
+    const handleFileChange = () => {
+        setConfig(prev => ({ ...prev, fileName: 'new_interest_logic.xlsx' }));
+        if (errors.fileName) {
+            const newErrors = { ...errors };
+            delete newErrors.fileName;
+            setErrors(newErrors);
+        }
+    };
+
+    const validateAndCollapse = () => {
+        const newErrors = {};
+        if (!config.name.trim()) newErrors.name = "Name is required.";
+        if (!config.category) newErrors.category = "Category is required.";
+        if (!config.type) newErrors.type = "Type is required.";
+        if (!config.fileName) newErrors.fileName = "A file must be uploaded.";
+        setErrors(newErrors);
+        if (Object.keys(newErrors).length === 0) {
+            toggleSection('configuration');
+        }
+    };
+
+    const handleDragStart = (e, index) => {
+        setDraggedIndex(index);
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleDragOver = (e) => e.preventDefault();
+
+    const handleDrop = (e, dropIndex, list, setList) => {
+        e.preventDefault();
+        if (draggedIndex === null) return;
+        const newList = [...list];
+        const draggedItem = newList[draggedIndex];
+        newList.splice(draggedIndex, 1);
+        newList.splice(dropIndex, 0, draggedItem);
+        setList(newList);
+        setDraggedIndex(null);
+    };
+
+    const addNewMapping = (type) => {
+        const list = type === 'input' ? inputMappings : outputMappings;
+        const setList = type === 'input' ? setInputMappings : setOutputMappings;
+        const newMapping = { id: list.length + 1, fieldName: `new_${type}`, sheet: 'Sheet1', cell: 'A4', dataType: 'Number', status: 'pending' };
+        setList(prev => [...prev, newMapping]);
+    };
+
+    const deleteMapping = (id, type) => {
+        const setList = type === 'input' ? setInputMappings : setOutputMappings;
+        setList(prev => prev.filter(m => m.id !== id));
+    };
+
+    const handleTestInputChange = (field, value) => {
+        setTestInputs(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleCompute = () => {
+        const principal = parseFloat(testInputs.principal);
+        const rate = parseFloat(testInputs.interest) / 100;
+        const time = parseFloat(testInputs.time);
+        
+        if (isNaN(principal) || isNaN(rate) || isNaN(time)) return;
+
+        const compoundInterest = principal * Math.pow(1 + rate, time) - principal;
+        const totalAmount = principal + compoundInterest;
+        const newTest = {
+            id: testHistory.length + 1,
+            inputs: { interest: parseFloat(testInputs.interest), principal, time },
+            result: totalAmount,
+            timestamp: 'Just now'
+        };
+        setTestHistory(prev => [newTest, ...prev.slice(0, 4)]);
+    };
+
+    const exportResults = () => {
+        const data = { calculation: config.name, testHistory, timestamp: new Date().toISOString() };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'test-results.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    const renderMappingTable = (title, icon, mappings, setMappings, type) => (
+        <div className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
+            <div className="flex items-center space-x-2">
+              {React.createElement(icon, { className: "w-5 h-5 text-indigo-600" })}
+              <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+              <InfoIcon className="w-4 h-4 text-gray-400" />
+            </div>
+            <button onClick={() => addNewMapping(type)} className="flex items-center space-x-2 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm w-full sm:w-auto justify-center">
+              <PlusIcon className="w-4 h-4" />
+              <span>Add New</span>
+            </button>
+          </div>
+          <div className="overflow-x-auto rounded-lg border border-gray-200">
+            <table className="w-full min-w-[640px]">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Field Name</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sheet</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cell</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Type</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {mappings.map((mapping, index) => (
+                  <tr key={mapping.id} draggable onDragStart={(e) => handleDragStart(e, index)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, index, mappings, setMappings)} className="hover:bg-gray-50 cursor-move transition-colors">
+                    <td className="px-4 py-3"><input type="text" defaultValue={mapping.fieldName} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" /></td>
+                    <td className="px-4 py-3 text-sm text-gray-900">{mapping.sheet}</td>
+                    <td className="px-4 py-3"><input type="text" defaultValue={mapping.cell} className="w-16 px-2 py-1 border border-gray-300 rounded text-sm text-center focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" /></td>
+                    <td className="px-4 py-3"><select defaultValue={mapping.dataType} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"><option>Number</option><option>Percentage</option><option>Text</option><option>Currency</option></select></td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center space-x-2">
+                        {mapping.status === 'mapped' ? <CheckCircleIcon className="w-4 h-4 text-green-500" /> : <AlertCircleIcon className="w-4 h-4 text-amber-500" />}
+                        <span className={`text-sm font-medium ${mapping.status === 'mapped' ? 'text-green-600' : 'text-amber-600'}`}>{mapping.status === 'mapped' ? 'Mapped' : 'Pending'}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center space-x-2">
+                        <button className="p-1 text-gray-400 hover:text-indigo-600 rounded hover:bg-indigo-50 transition-colors"><EditIcon className="w-4 h-4" /></button>
+                        <button onClick={() => deleteMapping(mapping.id, type)} className="p-1 text-gray-400 hover:text-red-600 rounded hover:bg-red-50 transition-colors"><Trash2Icon className="w-4 h-4" /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    );
+
+    return (
+        <main className="flex-1 bg-gray-50 overflow-y-auto">
+            <div className="p-4 sm:p-6 space-y-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <button onClick={() => toggleSection('configuration')} className="w-full px-4 sm:px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center"><SettingsIcon className="w-4 h-4 text-indigo-600" /></div>
+                            <div className="text-left">
+                                <h2 className="text-lg font-semibold text-gray-900">Configuration</h2>
+                                <p className="text-sm text-gray-500 hidden sm:block">Define the core properties and link your logic file.</p>
+                            </div>
+                        </div>
+                        {expandedSections.configuration ? <ChevronDownIcon className="w-5 h-5 text-gray-400" /> : <ChevronRightIcon className="w-5 h-5 text-gray-400" />}
+                    </button>
+                    {expandedSections.configuration && (
+                        <div className="px-4 sm:px-6 pb-6 border-t border-gray-100">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                    <input type="text" name="name" value={config.name} onChange={handleConfigChange} className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500'}`} />
+                                    {errors.name && <p className="text-red-600 text-xs mt-1">{errors.name}</p>}
+                                </div>
+                                <div>
+                                    <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-1"><span>Category</span><InfoIcon className="w-4 h-4 text-gray-400" /></label>
+                                    <select name="category" value={config.category} onChange={handleConfigChange} className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.category ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500'}`}>
+                                        <option value="">Select Category</option><option value="Finance">Finance</option><option value="Mathematics">Mathematics</option><option value="Engineering">Engineering</option>
+                                    </select>
+                                    {errors.category && <p className="text-red-600 text-xs mt-1">{errors.category}</p>}
+                                </div>
+                            </div>
+                            <div className="mt-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <textarea name="description" rows={3} value={config.description} onChange={handleConfigChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" />
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                                <div>
+                                    <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-1"><span>Type</span><InfoIcon className="w-4 h-4 text-gray-400" /></label>
+                                    <select name="type" value={config.type} onChange={handleConfigChange} className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.type ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500'}`}>
+                                        <option value="">Select Type</option><option value="Excel">Excel</option><option value="Python">Python</option><option value="JavaScript">JavaScript</option>
+                                    </select>
+                                    {errors.type && <p className="text-red-600 text-xs mt-1">{errors.type}</p>}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">File Upload</label>
+                                    <div className={`flex items-center border rounded-lg p-2 ${errors.fileName ? 'border-red-500' : 'border-gray-300'}`}>
+                                        <button onClick={handleFileChange} className="flex items-center space-x-2 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium"><PaperclipIcon className="w-4 h-4" /><span>Select file</span></button>
+                                        <span className={`ml-3 text-sm flex-grow truncate ${config.fileName ? 'text-gray-700' : 'text-gray-400'}`}>{config.fileName || 'No file selected'}</span>
+                                        {config.fileName && <button className="p-1 text-gray-400 hover:text-indigo-600 rounded-full hover:bg-gray-100 transition-colors"><DownloadIcon className="w-4 h-4" /></button>}
+                                    </div>
+                                    {errors.fileName && <p className="text-red-600 text-xs mt-1">{errors.fileName}</p>}
+                                </div>
+                            </div>
+                            <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end">
+                                <button onClick={validateAndCollapse} className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center space-x-2 text-sm font-medium"><CheckCircleIcon className="w-4 h-4" /><span>OK</span></button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <button onClick={() => toggleSection('mapping')} className="w-full px-4 sm:px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center"><ArrowUpDownIcon className="w-4 h-4 text-indigo-600" /></div>
+                            <div className="text-left">
+                                <h2 className="text-lg font-semibold text-gray-900">Mapping & Testing</h2>
+                                <p className="text-sm text-gray-500 hidden sm:block">Map variables, test your logic, and configure advanced settings.</p>
+                            </div>
+                        </div>
+                        {expandedSections.mapping ? <ChevronDownIcon className="w-5 h-5 text-gray-400" /> : <ChevronRightIcon className="w-5 h-5 text-gray-400" />}
+                    </button>
+                    {expandedSections.mapping && (
+                        <div className="border-t border-gray-100">
+                            <div className="px-4 sm:px-6 pt-2">
+                                <div className="flex space-x-1 border-b border-gray-200 overflow-x-auto">
+                                    {[ { id: 'input', label: 'Input', icon: ArrowUpDownIcon }, { id: 'output', label: 'Output', icon: FileTextIcon }, { id: 'test', label: 'Test', icon: FlaskConicalIcon } ].map(tab => (
+                                        <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center space-x-2 px-4 py-3 border-b-2 font-semibold text-sm transition-colors whitespace-nowrap ${ activeTab === tab.id ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }`}>
+                                            <tab.icon className="w-4 h-4" /><span>{tab.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            {activeTab === 'input' && renderMappingTable('Input Mapping', ArrowUpDownIcon, inputMappings, setInputMappings, 'input')}
+                            {activeTab === 'output' && renderMappingTable('Output Mapping', FileTextIcon, outputMappings, setOutputMappings, 'output')}
+                            {activeTab === 'test' && (
+                                <div className="p-4 sm:p-6">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                        <div>
+                                            <div className="flex items-center space-x-2 mb-4"><FlaskConicalIcon className="w-5 h-5 text-indigo-600" /><h3 className="text-lg font-medium text-gray-900">Inline Test</h3><InfoIcon className="w-4 h-4 text-gray-400" /></div>
+                                            <div className="space-y-4 p-4 bg-gray-50 rounded-lg border">
+                                                <h4 className="font-medium text-gray-700">Test Inputs</h4>
+                                                <div><label className="block text-sm text-gray-600 mb-1">Interest (%)</label><input type="number" value={testInputs.interest} onChange={(e) => handleTestInputChange('interest', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"/></div>
+                                                <div><label className="block text-sm text-gray-600 mb-1">Principal Amount ($)</label><input type="number" value={testInputs.principal} onChange={(e) => handleTestInputChange('principal', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"/></div>
+                                                <div><label className="block text-sm text-gray-600 mb-1">Time (years)</label><input type="number" value={testInputs.time} onChange={(e) => handleTestInputChange('time', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"/></div>
+                                                <button onClick={handleCompute} className="w-full flex items-center justify-center space-x-2 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"><CalculatorIcon className="w-4 h-4" /><span>Compute</span></button>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="font-medium text-gray-700 mb-4">Output Preview</h4>
+                                                <div className="bg-gray-900 text-white rounded-lg p-4 space-y-2">
+                                                    {testHistory.length > 0 ? (<div className="flex justify-between items-center"><span className="text-gray-300">Total Amount:</span><span className="font-bold text-2xl text-green-400">${testHistory[0].result.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>) : (<p className="text-gray-400 text-sm">Run a computation to see the output.</p>)}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center justify-between mb-4"><h4 className="font-medium text-gray-700">Calculation History</h4><button onClick={exportResults} className="flex items-center space-x-2 px-3 py-1 text-sm text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors"><DownloadIcon className="w-4 h-4" /><span>Export</span></button></div>
+                                                <div className="space-y-2">
+                                                    {testHistory.map(test => (<div key={test.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border"><div className="flex items-center space-x-3"><ClockIcon className="w-4 h-4 text-gray-400" /><div className="text-sm"><span className="text-gray-600">P: {test.inputs.principal}, R: {test.inputs.interest}%, T: {test.inputs.time}y</span></div></div><div className="flex items-center space-x-3"><span className="font-medium text-gray-800">${test.result.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><span className="text-xs text-gray-500">{test.timestamp}</span><button className="p-1 text-gray-400 hover:text-indigo-600 rounded hover:bg-indigo-50 transition-colors"><CopyIcon className="w-3 h-3" /></button></div></div>))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-8 pt-6 border-t border-gray-200">
+                                        <div className="flex items-center space-x-2 mb-4"><SettingsIcon className="w-5 h-5 text-gray-600" /><h4 className="font-medium text-gray-700">Advanced</h4></div>
+                                        <div className="bg-gray-50 rounded-lg p-2 border"><button className="flex items-center justify-between w-full text-left p-2 hover:bg-gray-100 rounded-md"><div className="flex items-center space-x-2"><Code2Icon className="w-4 h-4 text-gray-600" /><span className="text-sm font-medium text-gray-700">JSON Test</span><InfoIcon className="w-4 h-4 text-gray-400" /></div><ChevronRightIcon className="w-4 h-4 text-gray-400" /></button></div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </main>
+    );
+}
+
+const DashboardLayout = () => {
+    const [activeItem, setActiveItem] = useState('Dashboard');
+    const [modalContent, setModalContent] = useState(null);
+    const [isNotificationsOpen, setNotificationsOpen] = useState(false);
+    const [isChatOpen, setChatOpen] = useState(false);
+    const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+    const [editingItem, setEditingItem] = useState(null);
+    
+    // --- Search State ---
+    const [searchTerm, setSearchTerm] = useState('');
+    const [submittedSearchTerm, setSubmittedSearchTerm] = useState(null); 
+    const [activeFilters, setActiveFilters] = useState([]);
+    const [showSearchPopover, setShowSearchPopover] = useState(false);
+    const searchRef = useRef(null);
+
+    // --- Effects for managing search UI ---
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setShowSearchPopover(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+    
+    // --- Event Handlers ---
+    const handleFilterChange = (filterType) => {
+        setActiveFilters(prev => 
+            prev.includes(filterType) 
+            ? prev.filter(f => f !== filterType)
+            : [...prev, filterType]
+        );
+        if(!showSearchPopover) setShowSearchPopover(true);
+    };
+
+    const handleSearchKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            setSubmittedSearchTerm(searchTerm);
+            setShowSearchPopover(true);
+        } else if (event.key === 'Escape') {
+            setShowSearchPopover(false);
+        }
+    };
+    
+    const handleSearchFocus = () => setShowSearchPopover(true);
+    
+    const openModal = (items, title) => {
+        setModalContent({ items, title });
+        setActiveItem(title);
+    };
+    
+    const closeModal = () => {
+        setModalContent(null);
+        if (!editingItem) {
+            setActiveItem('Dashboard');
+        }
+    };
+
+    const handleSelectItem = (item) => {
+        setEditingItem(item);
+        setActiveItem(item.name);
+        closeModal();
+    };
+
+    const toggleNotifications = () => setNotificationsOpen(prev => !prev);
+
+    const renderContent = () => {
+        if (editingItem) {
+            if (editingItem.type === 'Compute') {
+                return <ComputePage item={editingItem} setEditingItem={setEditingItem} />;
+            }
+        }
+        if (activeItem === 'Dashboard') return <AiDashboard />;
+        return <GenericPagePlaceholder pageTitle={activeItem} />;
+    };
+    
+    const pageTitle = editingItem ? editingItem.name : activeItem;
+
+    return (
+        <div className="relative flex h-screen font-sans antialiased overflow-hidden bg-white">
+            <style>{`
+                @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+                .animate-float { animation: float 6s ease-in-out infinite; }
+                @keyframes pulse-slow { 0% { opacity: 0.1; transform: scale(0.95); } 50% { opacity: 0.2; transform: scale(1.05); } 100% { opacity: 0.1; transform: scale(0.95); } }
+                .animate-pulse-slow { animation: pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+                @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+                .animate-fade-in { animation: fade-in 0.7s ease-out forwards; }
+                .prose { max-width: 65ch; color: #374151; }
+                .prose ul { padding-left: 1.25rem; }
+                .prose ul > li { margin-top: 0.5em; margin-bottom: 0.5em; }
+            `}</style>
+        
+            {isMobileNavOpen && <div className="fixed inset-0 bg-black/30 z-30 lg:hidden" onClick={() => setMobileNavOpen(false)}></div>}
+
+            <div className={`fixed lg:relative inset-y-0 left-0 z-40 transition-transform duration-300 transform lg:transform-none ${isMobileNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                 <Sidebar 
+                    activeItem={activeItem} 
+                    setActiveItem={setActiveItem} 
+                    openModal={openModal} 
+                    isCollapsed={isSidebarCollapsed}
+                    setSidebarCollapsed={setSidebarCollapsed} 
+                    setEditingItem={setEditingItem} 
+                 />
+            </div>
+            
+            <div className="flex-1 flex flex-col transition-all duration-300 ease-in-out overflow-y-auto">
+                <TopBar 
+                    openNotifications={toggleNotifications}
+                    setMobileNavOpen={setMobileNavOpen} 
+                    title={pageTitle}
+                    searchRef={searchRef}
+                    onSearchKeyDown={handleSearchKeyDown}
+                    onSearchFocus={handleSearchFocus}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    onFilterToggle={() => setShowSearchPopover(prev => !prev)}
+                    editingItem={editingItem}
+                />
+                
+                <div className="absolute top-16 left-0 right-0 flex justify-center z-20 px-4 pointer-events-none">
+                  <div className="w-full max-w-xl relative pointer-events-auto">
+                    {showSearchPopover && (
+                        <UnifiedSearchPopover 
+                            submittedSearchTerm={submittedSearchTerm || searchTerm}
+                            activeFilters={activeFilters}
+                            onFilterChange={handleFilterChange}
+                        />
+                    )}
+                   </div>
+                </div>
+
+                <div className="flex-1 flex flex-col">{renderContent()}</div>
+            </div>
+
+            <ListModal isOpen={!!modalContent} content={modalContent} onClose={closeModal} onSelectItem={handleSelectItem} />
+            <NotificationsPanel isOpen={isNotificationsOpen} closePanel={() => setNotificationsOpen(false)} />
+            
+            {activeItem !== 'Dashboard' && (
+                <button 
+                    onClick={() => setChatOpen(true)}
+                    className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+                    style={{ boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)' }}
+                    aria-label="Open AI Chat"
+                >
+                    <ChatBubbleIcon className="w-7 h-7" />
+                </button>
+            )}
+            <ChatModal isOpen={isChatOpen} closeChatbot={() => setChatOpen(false)} context={activeItem} />
+        </div>
+    );
+};
+
+export default function App() {
+    return <DashboardLayout />;
+}
