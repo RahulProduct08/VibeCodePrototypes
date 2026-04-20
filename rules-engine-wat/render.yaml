@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: rules-engine-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false          # set manually in Render dashboard
+      - key: DATABASE_URL
+        sync: false          # set manually or use Render's managed Postgres
+    healthCheckPath: /health
