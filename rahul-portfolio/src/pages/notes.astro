@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+
+const essays = [
+  {
+    category: 'Product Philosophy',
+    title: 'Insurance is a workflow problem.',
+    excerpt: 'The industry has spent billions on analytics dashboards. The quote-to-bind gap persists because nobody mapped the 23 decision points between intake and issuance. Better data does not help when the bottleneck is process architecture, not information.',
+    readTime: '4 min read',
+    year: '2024',
+  },
+  {
+    category: 'Platform Design',
+    title: 'Configurability outscales hardcoding.',
+    excerpt: 'A hardcoded business rule is a debt instrument with no maturity date. Every time the business changes — and it will — someone pays the interest. Parameterizable systems break this cycle by making behavior a configuration question, not a deployment question.',
+    readTime: '5 min read',
+    year: '2024',
+  },
+  {
+    category: 'UX Systems',
+    title: 'The form is the first data model.',
+    excerpt: 'Enterprise teams obsess over database schema and ignore intake UX. The two are inseparable. Every question you fail to ask at intake becomes a null you cannot query later. The form is not a UI decision — it is a data architecture decision.',
+    readTime: '3 min read',
+    year: '2023',
+  },
+  {
+    category: 'Identity Systems',
+    title: 'Static authentication is a checkpoint, not a system.',
+    excerpt: 'Passwords and biometric gates verify who started a session. Continuous behavioral scoring tracks whether the same person is still in it. The difference is not a feature — it is a fundamentally different threat model, one that treats trust as a probability, not a binary.',
+    readTime: '4 min read',
+    year: '2023',
+  },
+  {
+    category: 'AI in Practice',
+    title: 'AI does not replace the underwriter. It reclassifies the queue.',
+    excerpt: 'The fear is that models eliminate judgment. The reality: a risk-scoring engine handles the obvious ends of the distribution — clear approvals, clear declines — and routes genuinely ambiguous cases to human reviewers with more context than they had before. The underwriter\'s judgment becomes more precise, not redundant.',
+    readTime: '6 min read',
+    year: '2024',
+  },
+  {
+    category: 'Architecture',
+    title: 'Every platform decision is a bet on future optionality.',
+    excerpt: 'You do not pay for architectural decisions at design time. You pay every time the business needs the system to do something the architecture did not anticipate. The right question is not whether this works today. It is what becomes impossible if you build it this way.',
+    readTime: '5 min read',
+    year: '2024',
+  },
+];
+---
+
+<Layout
+  title="Notes"
+  description="Essays on platform thinking, AI systems, identity architecture, and product philosophy by Rahul Kumar Ranjan."
+>
+
+  <!-- ── Page header ───────────────────────────────────────────────────── -->
+  <section class="relative px-6 pt-24 pb-16 overflow-hidden" aria-label="Page header">
+    <div class="pointer-events-none absolute inset-0 -z-10"
+      style="background: radial-gradient(ellipse 50% 40% at 60% 0%, rgba(59,130,246,0.07) 0%, transparent 70%);">
+    </div>
+    <div class="max-w-4xl mx-auto reveal">
+      <SectionHeader
+        eyebrow="Notes"
+        title="Essays on systems, platforms, and AI."
+        description="Sharp observations from building workflows, underwriting engines, and identity systems — written for practitioners, not audiences."
+      />
+    </div>
+  </section>
+
+  <!-- ── Essays list ───────────────────────────────────────────────────── -->
+  <section class="px-6 pb-32" aria-label="Essays">
+    <div class="max-w-4xl mx-auto flex flex-col gap-5">
+      {essays.map(({ category, title, excerpt, readTime, year }, i) => (
+        <article
+          class={`essay-card reveal reveal-d${Math.min(i + 1, 5)}`}
+          style={`transition-delay: ${(i * 0.06).toFixed(2)}s`}
+        >
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <span class="label-caps">{category}</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <span class="text-xs" style="color: var(--color-steel-700); font-family: var(--font-mono);">{readTime}</span>
+              <span class="text-xs" style="color: var(--color-steel-700); font-family: var(--font-mono);">{year}</span>
+            </div>
+          </div>
+
+          <h2 class="display-lg mb-4" style="font-size: clamp(1.3rem, 2.5vw, 1.85rem);">{title}</h2>
+
+          <p class="text-sm leading-relaxed" style="color: var(--color-steel-400); max-width: 64ch;">
+            {excerpt}
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+</Layout>
