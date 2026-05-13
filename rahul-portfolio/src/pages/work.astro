@@ -2,56 +2,141 @@
 import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import Card from '../components/Card.astro';
-import MermaidDiagram from '../components/MermaidDiagram.astro';
 import ImageContainer from '../components/ImageContainer.astro';
+import AnimatedWorkflow from '../components/AnimatedWorkflow.astro';
+import type { FlowStep } from '../components/AnimatedWorkflow.astro';
 
-const insuredeskDiagram = `flowchart TD
-    A([Agent / Broker]) --> B[InsureDesk Portal]
-    B --> C{Select Product}
-    C -->|Annuity| D[Annuity Intake]
-    C -->|Life / Term| E[Life Policy Intake]
-    C -->|ROTH Conversion| F[ROTH Conversion Flow]
-    D --> G[Document Collection]
-    E --> G
-    F --> G
-    G --> H[AI Underwriting Engine]
-    H --> I{Risk Score}
-    I -->|Low Risk| J[Auto-Approve]
-    I -->|Medium Risk| K[Underwriter Queue]
-    I -->|High Risk| L[Decline or Refer]
-    J --> M[FAST Policy Admin]
-    K --> N[Manual Review]
-    N --> M
-    M --> O[Policy Issuance]
-    O --> P[Client Portal]
-    P --> Q[Ongoing Admin]`;
+const insuredeskFlow: FlowStep[] = [
+  {
+    label: 'Agent / Broker',
+    sublabel: 'Initiates policy request',
+    type: 'entry',
+  },
+  {
+    label: 'InsureDesk Portal',
+    sublabel: 'Unified intake hub — dynamic form engine',
+    type: 'process',
+  },
+  {
+    label: 'Select Product Type',
+    sublabel: 'Routes to appropriate workflow',
+    type: 'decision',
+    branches: [
+      { label: 'Annuity',          sublabel: 'Fixed / Variable',   variant: 'info' },
+      { label: 'Life / Term',      sublabel: 'Standard intake',     variant: 'info' },
+      { label: 'ROTH Conversion',  sublabel: 'Tax workflow',        variant: 'info' },
+    ],
+  },
+  {
+    label: 'Document Collection',
+    sublabel: 'KYC, financials, medical flags',
+    type: 'process',
+  },
+  {
+    label: 'AI Underwriting Engine',
+    sublabel: 'LLM-assisted risk assessment on carrier guidelines',
+    type: 'ai',
+  },
+  {
+    label: 'Risk Score',
+    sublabel: 'Classifies into one of three tracks',
+    type: 'decision',
+    branches: [
+      { label: 'Auto-Approve',       sublabel: 'Low risk profile',   variant: 'success' },
+      { label: 'Underwriter Queue',  sublabel: 'Manual review',      variant: 'warning' },
+      { label: 'Decline / Refer',    sublabel: 'High risk',          variant: 'danger'  },
+    ],
+  },
+  {
+    label: 'FAST Policy Admin',
+    sublabel: 'Policy administration & binding system',
+    type: 'process',
+  },
+  {
+    label: 'Policy Issuance',
+    sublabel: 'Bound, confirmed, and delivered',
+    type: 'output',
+  },
+  {
+    label: 'Client Portal',
+    sublabel: 'Self-service dashboard & document access',
+    type: 'output',
+  },
+  {
+    label: 'Ongoing Administration',
+    sublabel: 'Renewals · Claims · Amendments',
+    type: 'terminal',
+  },
+];
 
-const mittarvDiagram = `flowchart TD
-    A([New User]) --> B[Enrollment Flow]
-    B --> C{Biometric Capture}
-    C -->|Face Scan| D[Face Vector Store]
-    C -->|Fingerprint| E[Ridge Hash Store]
-    C -->|Behavioral| F[Interaction Baseline]
-    D --> G[Identity Profile]
-    E --> G
-    F --> G
-    G --> H[Continuous Auth Engine]
-    H --> I{Confidence Score}
-    I -->|High 95+| J[Full Access]
-    I -->|Medium 70-94| K[Step-Up Challenge]
-    I -->|Low below 70| L[Session Lock]
-    J --> M[Gamification Engine]
-    M --> N{Behavioral Logic}
-    N -->|Engagement Streak| O[Reward Token]
-    N -->|Anomaly Detected| P[Security Alert]`;
+const mittarvFlow: FlowStep[] = [
+  {
+    label: 'New User',
+    sublabel: 'Registration trigger',
+    type: 'entry',
+  },
+  {
+    label: 'Enrollment Flow',
+    sublabel: 'Guided multi-modal onboarding',
+    type: 'process',
+  },
+  {
+    label: 'Biometric Capture',
+    sublabel: 'Three parallel capture modalities',
+    type: 'decision',
+    branches: [
+      { label: 'Face Scan',    sublabel: 'Vector extraction',    variant: 'info' },
+      { label: 'Fingerprint',  sublabel: 'Ridge hash store',     variant: 'info' },
+      { label: 'Behavioral',   sublabel: 'Interaction baseline', variant: 'info' },
+    ],
+  },
+  {
+    label: 'Identity Profile',
+    sublabel: 'Unified biometric store — encrypted at rest',
+    type: 'process',
+  },
+  {
+    label: 'Continuous Auth Engine',
+    sublabel: 'Re-scores every 90s without interrupting UX',
+    type: 'ai',
+  },
+  {
+    label: 'Confidence Score',
+    sublabel: 'Three-tier response routing',
+    type: 'decision',
+    branches: [
+      { label: 'Full Access',       sublabel: 'Score ≥ 95%',   variant: 'success' },
+      { label: 'Step-Up Challenge', sublabel: 'Score 70–94%',  variant: 'warning' },
+      { label: 'Session Lock',      sublabel: 'Score < 70%',   variant: 'danger'  },
+    ],
+  },
+  {
+    label: 'Gamification Engine',
+    sublabel: 'Behavioral logic layer — streak & reward tracking',
+    type: 'process',
+  },
+  {
+    label: 'Behavioral Logic',
+    sublabel: 'Forks on engagement vs. anomaly signal',
+    type: 'decision',
+    branches: [
+      { label: 'Reward Token',   sublabel: 'Engagement streak',  variant: 'success' },
+      { label: 'Security Alert', sublabel: 'Anomaly detected',   variant: 'danger'  },
+    ],
+  },
+];
 ---
 
-<Layout title="Work & Systems" description="Professional engagements — InsureDesk, AI Underwriting Engines, and the Mitt Arv biometric platform.">
+<Layout
+  title="Work & Systems"
+  description="Professional engagements — InsureDesk, AI Underwriting Engines, and the Mitt Arv biometric platform."
+>
 
   <!-- ── Page header ───────────────────────────────────────────────────── -->
   <section class="relative px-6 pt-24 pb-16 overflow-hidden" aria-label="Page header">
     <div class="pointer-events-none absolute inset-0 -z-10"
-      style="background: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(59,130,246,0.07) 0%, transparent 70%);"></div>
+      style="background: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(59,130,246,0.07) 0%, transparent 70%);">
+    </div>
     <div class="max-w-6xl mx-auto reveal">
       <SectionHeader
         eyebrow="Work & Systems"
@@ -63,10 +148,9 @@ const mittarvDiagram = `flowchart TD
 
   <!-- ── Aspyr AI Labs ─────────────────────────────────────────────────── -->
   <section id="aspyr" class="px-6 py-20" aria-labelledby="aspyr-heading">
-    <div class="max-w-6xl mx-auto flex flex-col gap-14">
+    <div class="max-w-6xl mx-auto flex flex-col gap-16">
 
       <div class="grid-asymmetric items-start">
-        <!-- Left: context -->
         <div class="flex flex-col gap-6">
           <div class="reveal-left">
             <SectionHeader
@@ -91,32 +175,37 @@ const mittarvDiagram = `flowchart TD
           </ul>
         </div>
 
-        <!-- Right: image + cards -->
         <div class="flex flex-col gap-4">
           <div class="reveal">
             <ImageContainer alt="InsureDesk platform dashboard" seed="insurance-dashboard" />
           </div>
           <div class="grid grid-cols-2 gap-4">
-            <div class="reveal reveal-d1"><Card variant="stat" tag="Efficiency" title="Quote-to-Bind" number="48h" /></div>
+            <div class="reveal reveal-d1"><Card variant="stat" tag="Efficiency" title="Quote-to-Bind" number="48h"  /></div>
             <div class="reveal reveal-d2"><Card variant="stat" tag="Coverage"   title="Policy Types"  number="12+" /></div>
           </div>
           <div class="reveal reveal-d1">
             <Card variant="project" tag="Core Product" title="InsureDesk"
-              description="Configurable SaaS portal for insurance agents handling annuities, life policies, and ROTH conversions with a dynamic form engine." />
+              description="Configurable SaaS portal for agents handling annuities, life policies, and ROTH conversions with a dynamic form engine." />
           </div>
           <div class="reveal reveal-d2">
             <Card variant="project" tag="AI Engine" title="AI Underwriting Engine"
-              description="LLM-assisted risk assessment trained on carrier guidelines. Classifies into auto-approve, manual review, or decline tracks." />
-          </div>
-          <div class="reveal reveal-d3">
-            <Card variant="project" tag="Workflow" title="ROTH Conversion Orchestrator"
-              description="Multi-step workflow covering tax implication surfacing, contribution limit validation, and custodian handoff in a single guided session." />
+              description="LLM-assisted risk assessment trained on carrier guidelines — auto-approve, review, or decline tracks." />
           </div>
         </div>
       </div>
 
+      <!-- Animated InsureDesk workflow -->
       <div class="reveal">
-        <MermaidDiagram id="insuredesk-diagram" title="InsureDesk — End-to-End Workflow" diagram={insuredeskDiagram} />
+        <div class="rim-card rounded-2xl overflow-hidden surface-raised">
+          <div class="px-6 py-4 border-b rim-border flex items-center gap-3">
+            <span class="label-caps">InsureDesk — End-to-End Workflow</span>
+            <span class="ml-auto flex items-center gap-1.5 text-xs" style="color: var(--color-steel-600);">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+              Live flow
+            </span>
+          </div>
+          <AnimatedWorkflow steps={insuredeskFlow} id="insuredesk-workflow" />
+        </div>
       </div>
 
     </div>
@@ -127,17 +216,16 @@ const mittarvDiagram = `flowchart TD
 
   <!-- ── Mitt Arv ───────────────────────────────────────────────────────── -->
   <section id="mittarv" class="px-6 py-20" aria-labelledby="mittarv-heading">
-    <div class="max-w-6xl mx-auto flex flex-col gap-14">
+    <div class="max-w-6xl mx-auto flex flex-col gap-16">
 
       <div class="grid-asymmetric items-start">
-        <!-- Left: context -->
         <div class="flex flex-col gap-6">
           <div class="reveal-left">
             <SectionHeader
               eyebrow="Mitt Arv · 2022–2023"
               title="Identity & Behavioral Logic"
               id="mittarv-heading"
-              description="Multi-modal biometric security layer and a gamification engine that drives sustained engagement through behavioral incentives."
+              description="Multi-modal biometric security and a gamification engine that drives engagement through behavioral incentives."
             />
           </div>
           <ul class="reveal flex flex-col gap-3 text-sm" style="color: var(--color-steel-400);">
@@ -155,28 +243,37 @@ const mittarvDiagram = `flowchart TD
           </ul>
         </div>
 
-        <!-- Right: image + cards -->
         <div class="flex flex-col gap-4">
           <div class="reveal">
             <ImageContainer alt="Mitt Arv biometric identity platform" seed="biometric-security" />
           </div>
           <div class="grid grid-cols-2 gap-4">
-            <div class="reveal reveal-d1"><Card variant="stat" tag="Engagement" title="WAU Lift"            number="+34%" /></div>
+            <div class="reveal reveal-d1"><Card variant="stat" tag="Engagement" title="WAU Lift"             number="+34%" /></div>
             <div class="reveal reveal-d2"><Card variant="stat" tag="Auth"       title="Confidence Threshold" number="95%"  /></div>
           </div>
           <div class="reveal reveal-d1">
             <Card variant="project" tag="Security Layer" title="Biometric Identity System"
-              description="Multi-modal identity verification combining face vectors, fingerprint hashes, and behavioral signals. Re-scores sessions every 90 seconds without interrupting UX." />
+              description="Multi-modal verification combining face vectors, fingerprint hashes, and behavioral signals. Re-scores every 90s." />
           </div>
           <div class="reveal reveal-d2">
-            <Card variant="project" tag="Behavioral Logic Engine" title="Gamification System"
-              description="Engagement loop built on streak mechanics, milestone rewards, and behavioral anomaly detection. Rewards issued as on-platform tokens." />
+            <Card variant="project" tag="Behavioral Logic" title="Gamification Engine"
+              description="Streak mechanics, milestone rewards, and behavioral anomaly detection — rewards issued as on-platform tokens." />
           </div>
         </div>
       </div>
 
+      <!-- Animated Mitt Arv workflow -->
       <div class="reveal">
-        <MermaidDiagram id="mittarv-diagram" title="Mitt Arv — Biometric Identity & Gamification Architecture" diagram={mittarvDiagram} />
+        <div class="rim-card rounded-2xl overflow-hidden surface-raised">
+          <div class="px-6 py-4 border-b rim-border flex items-center gap-3">
+            <span class="label-caps">Mitt Arv — Biometric Identity & Gamification</span>
+            <span class="ml-auto flex items-center gap-1.5 text-xs" style="color: var(--color-steel-600);">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+              Live flow
+            </span>
+          </div>
+          <AnimatedWorkflow steps={mittarvFlow} id="mittarv-workflow" />
+        </div>
       </div>
 
     </div>
