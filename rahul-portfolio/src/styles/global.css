@@ -5,13 +5,11 @@
    ────────────────────────────────────────────────────────────────────────── */
 
 @theme {
-  /* Pearl Black backgrounds */
   --color-pearl-black:    #04060d;
   --color-pearl-950:      #06090f;
   --color-pearl-900:      #0a0f1a;
   --color-pearl-800:      #0e1525;
 
-  /* Blue Hour — deep navy to steel */
   --color-blue-hour-900:  #050d1f;
   --color-blue-hour-800:  #0a1628;
   --color-blue-hour-700:  #0f2042;
@@ -20,7 +18,6 @@
   --color-blue-hour-400:  #2a5490;
   --color-blue-hour-300:  #3b6baa;
 
-  /* Cool grays — text hierarchy */
   --color-steel-50:       #f0f4f8;
   --color-steel-100:      #d9e2ec;
   --color-steel-200:      #bcccdc;
@@ -32,35 +29,30 @@
   --color-steel-800:      #243b53;
   --color-steel-900:      #102a43;
 
-  /* Rim accent */
   --color-rim-bright:     #60a5fa;
   --color-rim-mid:        #3b82f6;
   --color-rim-dim:        rgba(59, 130, 246, 0.14);
   --color-rim-glow:       rgba(59, 130, 246, 0.08);
 
-  /* Semantic surfaces */
   --color-surface-base:   var(--color-pearl-black);
   --color-surface-raised: var(--color-pearl-900);
   --color-surface-float:  var(--color-pearl-800);
 
-  /* Typography */
   --font-sans:  ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono:  ui-monospace, 'SFMono-Regular', 'Fira Code', monospace;
 
-  /* Spacing rhythm */
   --spacing-section: clamp(4rem, 10vw, 8rem);
   --spacing-gap:     clamp(1.5rem, 4vw, 4rem);
 
-  /* Transitions */
-  --ease-snappy: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-snappy:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out:     cubic-bezier(0.0, 0.0, 0.2, 1);
 }
 
-/* ─── Base layer ─────────────────────────────────────────────────────────── */
+/* ─── Base ────────────────────────────────────────────────────────────────── */
 
 @layer base {
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
+  *, *::before, *::after { box-sizing: border-box; }
 
   html {
     background-color: var(--color-pearl-black);
@@ -83,50 +75,210 @@
   }
 }
 
+/* ─── Keyframe library ───────────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-14px); }
+}
+
+@keyframes floatYSlow {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.25; transform: scale(1);    }
+  50%       { opacity: 0.55; transform: scale(1.12); }
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.6; r: 4;   }
+  50%       { opacity: 1.0; r: 6.5; }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+@keyframes bgDrift {
+  0%, 100% { transform: translate(0,    0   ) scale(1);    }
+  33%       { transform: translate(24px, -18px) scale(1.06); }
+  66%       { transform: translate(-18px, 24px) scale(0.94); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ─── Scroll-reveal system ───────────────────────────────────────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity   0.75s var(--ease-snappy),
+    transform 0.75s var(--ease-snappy);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger helpers */
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+.reveal-d4 { transition-delay: 0.32s; }
+.reveal-d5 { transition-delay: 0.40s; }
+
+/* Variants */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.75s var(--ease-snappy), transform 0.75s var(--ease-snappy);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s var(--ease-spring), transform 0.6s var(--ease-spring);
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+/* ─── Hero entrance animations ───────────────────────────────────────────── */
+
+.hero-eyebrow { animation: fadeDown  0.6s var(--ease-snappy) 0.05s both; }
+.hero-line-1  { animation: fadeUp    0.8s var(--ease-snappy) 0.20s both; }
+.hero-line-2  { animation: fadeUp    0.8s var(--ease-snappy) 0.35s both; }
+.hero-desc    { animation: fadeUp    0.8s var(--ease-snappy) 0.50s both; }
+.hero-cta     { animation: fadeUp    0.8s var(--ease-snappy) 0.65s both; }
+.hero-scroll  { animation: fadeIn    1.2s var(--ease-snappy) 1.10s both; }
+.hero-visual  { animation: scaleIn   1.0s var(--ease-snappy) 0.30s both; }
+
+/* ─── Floating animation helpers ─────────────────────────────────────────── */
+
+.float       { animation: floatY     6s ease-in-out infinite; }
+.float-slow  { animation: floatYSlow 9s ease-in-out infinite; }
+.float-d1    { animation-delay: 0.5s; }
+.float-d2    { animation-delay: 1.2s; }
+.float-d3    { animation-delay: 2.0s; }
+
 /* ─── Rim Lighting ───────────────────────────────────────────────────────── */
 
-/* Standard card border — resting state */
 .rim-card {
   border: 1px solid rgba(59, 130, 246, 0.12);
-  transition: border-color 0.3s var(--ease-snappy),
-              box-shadow   0.3s var(--ease-snappy),
-              transform    0.3s var(--ease-snappy);
+  transition:
+    border-color 0.35s var(--ease-snappy),
+    box-shadow   0.35s var(--ease-snappy),
+    transform    0.35s var(--ease-snappy);
 }
 
-/* Hover: edge lighting blooms */
 .rim-card:hover {
-  border-color: rgba(59, 130, 246, 0.42);
+  border-color: rgba(59, 130, 246, 0.48);
   box-shadow:
-    0 0  0 1px rgba(59, 130, 246, 0.14),
-    0 0 24px rgba(59, 130, 246, 0.10),
-    0 0 48px rgba(59, 130, 246, 0.05),
-    inset 0 0 20px rgba(59, 130, 246, 0.04);
-  transform: translateY(-1px);
+    0 0  0 1px rgba(59, 130, 246, 0.16),
+    0 4px 32px rgba(59, 130, 246, 0.14),
+    0 8px 64px rgba(59, 130, 246, 0.06),
+    inset 0 0 24px rgba(59, 130, 246, 0.05);
+  transform: translateY(-4px) scale(1.01);
 }
 
-/* Active / selected state */
 .rim-card-active {
   border-color: rgba(59, 130, 246, 0.65);
   box-shadow:
-    0 0  0 1px rgba(59, 130, 246, 0.3),
+    0 0  0 1px rgba(59, 130, 246, 0.30),
     0 0 32px rgba(59, 130, 246, 0.15),
     inset 0 0 24px rgba(59, 130, 246, 0.06);
 }
 
-/* Strong rim — hero / featured cards */
 .rim-strong {
   border: 1px solid rgba(59, 130, 246, 0.28);
   box-shadow:
     0 0 40px rgba(59, 130, 246, 0.12),
     inset 0 0 30px rgba(59, 130, 246, 0.05);
+  transition: box-shadow 0.35s var(--ease-snappy), border-color 0.35s var(--ease-snappy);
 }
 
-/* Static decorative edge — no hover */
+.rim-strong:hover {
+  box-shadow:
+    0 0 60px rgba(59, 130, 246, 0.22),
+    inset 0 0 40px rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.50);
+}
+
 .rim-border {
   border: 1px solid rgba(59, 130, 246, 0.16);
 }
 
-/* ─── Typography utilities ───────────────────────────────────────────────── */
+/* ─── Image with hover-zoom ───────────────────────────────────────────────── */
+
+.img-zoom {
+  overflow: hidden;
+}
+
+.img-zoom img {
+  transition: transform 0.6s var(--ease-snappy), filter 0.6s ease;
+  will-change: transform;
+}
+
+.img-zoom:hover img {
+  transform: scale(1.07);
+  filter: brightness(1.08) saturate(1.1);
+}
+
+/* Shimmer loading state */
+.img-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-pearl-900) 25%,
+    var(--color-blue-hour-800) 50%,
+    var(--color-pearl-900) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ─── Typography ─────────────────────────────────────────────────────────── */
 
 .label-caps {
   font-size: 0.625rem;
@@ -158,56 +310,24 @@
   color: var(--color-steel-400);
 }
 
-/* ─── Grid system — asymmetric, breathable ───────────────────────────────── */
+/* ─── Grid system ────────────────────────────────────────────────────────── */
 
-/* Golden-ratio split  (1 : 1.618) */
-.grid-asymmetric {
-  display: grid;
-  grid-template-columns: 1fr 1.618fr;
-  gap: var(--spacing-gap);
-}
+.grid-asymmetric         { display: grid; grid-template-columns: 1fr 1.618fr;  gap: var(--spacing-gap); }
+.grid-asymmetric-reverse { display: grid; grid-template-columns: 1.618fr 1fr;  gap: var(--spacing-gap); }
+.grid-feature            { display: grid; grid-template-columns: 1fr 2fr 1fr;  gap: var(--spacing-gap); }
+.grid-masonry            { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.25rem; align-items: start; }
 
-/* Narrow lead column */
-.grid-asymmetric-reverse {
-  display: grid;
-  grid-template-columns: 1.618fr 1fr;
-  gap: var(--spacing-gap);
-}
-
-/* Three-column with heavier centre */
-.grid-feature {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: var(--spacing-gap);
-}
-
-/* Masonry-style 2-col vertical feed */
-.grid-masonry {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
-  align-items: start;
-}
-
-/* Responsive collapse */
 @media (max-width: 768px) {
   .grid-asymmetric,
   .grid-asymmetric-reverse,
-  .grid-feature {
-    grid-template-columns: 1fr;
-  }
-  .grid-masonry {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .grid-feature { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
-  .grid-masonry {
-    grid-template-columns: 1fr;
-  }
+  .grid-masonry { grid-template-columns: 1fr; }
 }
 
-/* ─── 9:16 vertical image container ─────────────────────────────────────── */
+/* ─── 9:16 container ─────────────────────────────────────────────────────── */
 
 .aspect-9-16 {
   aspect-ratio: 9 / 16;
@@ -216,17 +336,11 @@
   border-radius: 0.75rem;
 }
 
-/* ─── Surface utilities ──────────────────────────────────────────────────── */
+/* ─── Surfaces ───────────────────────────────────────────────────────────── */
 
-.surface-raised {
-  background-color: var(--color-pearl-900);
-}
+.surface-raised { background-color: var(--color-pearl-900); }
+.surface-float  { background-color: var(--color-pearl-800); }
 
-.surface-float {
-  background-color: var(--color-pearl-800);
-}
-
-/* Gradient overlays for Blue Hour transitions */
 .gradient-blue-hour {
   background: linear-gradient(
     135deg,
@@ -246,7 +360,7 @@
   );
 }
 
-/* ─── Nav blur bar ───────────────────────────────────────────────────────── */
+/* ─── Nav blur ───────────────────────────────────────────────────────────── */
 
 .nav-blur {
   background: rgba(4, 6, 13, 0.80);
@@ -254,7 +368,22 @@
   -webkit-backdrop-filter: blur(16px) saturate(1.6);
 }
 
-/* ─── Mermaid diagram overrides ──────────────────────────────────────────── */
+/* ─── Cursor glow ────────────────────────────────────────────────────────── */
+
+#cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s ease;
+  z-index: 0;
+  will-change: left, top;
+}
+
+/* ─── Mermaid ────────────────────────────────────────────────────────────── */
 
 .mermaid svg {
   max-width: 100%;

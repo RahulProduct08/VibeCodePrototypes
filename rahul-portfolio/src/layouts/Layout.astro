@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import { url } from '../utils/url';
 
 interface Props {
@@ -15,7 +16,7 @@ const {
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const currentPath = (Astro.url.pathname.replace(base, '') || '/');
+const currentPath = Astro.url.pathname.replace(base, '') || '/';
 
 const navLinks = [
   { local: '/',       href: url('/'),       label: 'Nexus'       },
@@ -39,10 +40,15 @@ const navLinks = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title} | Rahul Kumar Ranjan</title>
+    <ClientRouter />
   </head>
 
   <body>
-    <header class="nav-blur rim-border fixed top-0 inset-x-0 z-50 border-b">
+    <!-- Cursor glow -->
+    <div id="cursor-glow" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="nav-blur rim-border fixed top-0 inset-x-0 z-50 border-b" transition:persist>
       <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
         <a href={url('/')} aria-label="Home" class="label-caps hover:opacity-70 transition-opacity">
           RKR
@@ -57,7 +63,7 @@ const navLinks = [
               <a
                 href={href}
                 class={[
-                  'px-4 py-1.5 rounded-md text-sm transition-colors',
+                  'relative px-4 py-1.5 rounded-md text-sm transition-all duration-300',
                   isActive
                     ? 'text-white font-medium rim-border bg-blue-hour-800'
                     : 'text-steel-400 hover:text-white hover:bg-white/5',
@@ -119,7 +125,8 @@ const navLinks = [
     </footer>
 
     <script>
-      const btn = document.getElementById('mobile-menu-btn');
+      // Mobile menu
+      const btn  = document.getElementById('mobile-menu-btn');
       const menu = document.getElementById('mobile-menu');
       const barTop = document.getElementById('bar-top');
       const barMid = document.getElementById('bar-mid');
@@ -128,16 +135,45 @@ const navLinks = [
       btn?.addEventListener('click', () => {
         const open = menu?.classList.toggle('hidden') === false;
         btn.setAttribute('aria-expanded', String(open));
-        if (open) {
-          barTop?.classList.add('rotate-45', 'translate-y-[10px]');
-          barMid?.classList.add('opacity-0');
-          barBot?.classList.add('-rotate-45', '-translate-y-[6px]');
-        } else {
-          barTop?.classList.remove('rotate-45', 'translate-y-[10px]');
-          barMid?.classList.remove('opacity-0');
-          barBot?.classList.remove('-rotate-45', '-translate-y-[6px]');
-        }
+        barTop?.classList.toggle('rotate-45',      open);
+        barTop?.classList.toggle('translate-y-[10px]', open);
+        barMid?.classList.toggle('opacity-0',      open);
+        barBot?.classList.toggle('-rotate-45',     open);
+        barBot?.classList.toggle('-translate-y-[6px]', open);
       });
+
+      // Cursor glow
+      const glow = document.getElementById('cursor-glow') as HTMLElement | null;
+      if (glow && window.matchMedia('(pointer: fine)').matches) {
+        document.addEventListener('mousemove', (e) => {
+          glow.style.left = e.clientX + 'px';
+          glow.style.top  = e.clientY + 'px';
+        });
+        document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+        document.addEventListener('mouseenter',  () => { glow.style.opacity = '1'; });
+      } else if (glow) {
+        glow.style.display = 'none';
+      }
+
+      // Scroll reveal — Intersection Observer
+      function attachObserver() {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -48px 0px' }
+        );
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-scale')
+          .forEach((el) => observer.observe(el));
+      }
+
+      attachObserver();
+      document.addEventListener('astro:page-load', attachObserver);
     </script>
   </body>
 </html>
