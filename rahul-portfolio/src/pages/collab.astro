@@ -1,11 +1,61 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Card from '../components/Card.astro';
 ---
 
-<Layout title="Collaborate">
-  <div class="max-w-6xl mx-auto px-6 py-20">
-    <p class="text-xs tracking-widest uppercase text-blue-400 mb-4">Collaboration</p>
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-50 mb-16">Work Together</h1>
-    <p class="text-gray-500 text-sm">Content coming in Phase 4.</p>
-  </div>
+<Layout
+  title="Collaborate"
+  description="Reach out for product lessons, AI collaborations, or system strategy consulting."
+>
+
+  <!-- ── Page header ───────────────────────────────────────────────────── -->
+  <section class="relative px-6 pt-24 pb-16 overflow-hidden" aria-label="Page header">
+    <div
+      class="pointer-events-none absolute inset-0 -z-10"
+      style="background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(59,130,246,0.07) 0%, transparent 70%);"
+    ></div>
+    <div class="max-w-6xl mx-auto">
+      <SectionHeader
+        eyebrow="Collaborate"
+        title="Reach out for doubts, lessons, or collaborations."
+        description="Three ways to work together — choose the one that fits your goal."
+        align="center"
+      />
+    </div>
+  </section>
+
+  <!-- ── Tiers ──────────────────────────────────────────────────────────── -->
+  <section class="px-6 py-20" aria-label="Collaboration tiers">
+    <div class="max-w-6xl mx-auto flex flex-col gap-8">
+      <div class="grid md:grid-cols-3 gap-6">
+
+        <Card
+          variant="project"
+          tag="Tier 1"
+          title="Product Lessons"
+          description="Mentorship on moving from Intern to PM, transitioning to Platform roles, or planning a Head of Product career path."
+          href="/collab#lessons"
+        />
+
+        <Card
+          variant="project"
+          tag="Tier 2"
+          title="AI Collaborations"
+          description="Synthetic media, identity modeling, and generative agent projects. Bring an ambitious brief."
+          href="/collab#ai"
+        />
+
+        <Card
+          variant="project"
+          tag="Tier 3"
+          title="System Strategy"
+          description="Consulting on InsurTech, internal tooling, and modernizing legacy enterprise workflows."
+          href="/collab#strategy"
+        />
+
+      </div>
+    </div>
+  </section>
+
 </Layout>

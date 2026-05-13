@@ -4,40 +4,143 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
 }
 
-const { title, description = 'Rahul Kumar Ranjan — Platform & AI Systems Product Manager' } = Astro.props;
+const {
+  title,
+  description = 'Rahul Kumar Ranjan — Platform & AI Systems Product Manager focused on configurable platforms, workflow abstraction, and AI-enabled systems.',
+  ogImage = '/og-default.png',
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { href: '/',       label: 'Nexus'       },
+  { href: '/work',   label: 'Work'        },
+  { href: '/lab',    label: 'Lab'         },
+  { href: '/collab', label: 'Collaborate' },
+];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta property="og:title" content={`${title} | Rahul Kumar Ranjan`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title} | Rahul Kumar Ranjan</title>
   </head>
-  <body class="min-h-screen antialiased" style="background-color: var(--color-pearl-black); color: var(--color-steel-100);">
-    <nav class="nav-blur rim-border fixed top-0 inset-x-0 z-50 border-b">
+
+  <body>
+    <!-- Navigation -->
+    <header class="nav-blur rim-border fixed top-0 inset-x-0 z-50 border-b">
       <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <a href="/" class="label-caps hover:opacity-80 transition-opacity">RKR</a>
-        <div class="flex items-center gap-8 text-sm" style="color: var(--color-steel-400);">
-          <a href="/" class="hover:text-white transition-colors">Nexus</a>
-          <a href="/work" class="hover:text-white transition-colors">Work</a>
-          <a href="/lab" class="hover:text-white transition-colors">Lab</a>
-          <a href="/collab" class="hover:text-white transition-colors">Collaborate</a>
-        </div>
+        <!-- Wordmark -->
+        <a href="/" aria-label="Home" class="label-caps hover:opacity-70 transition-opacity">
+          RKR
+        </a>
+
+        <!-- Desktop nav -->
+        <nav class="hidden md:flex items-center gap-1" aria-label="Primary">
+          {navLinks.map(({ href, label }) => {
+            const isActive = href === '/'
+              ? currentPath === '/'
+              : currentPath.startsWith(href);
+            return (
+              <a
+                href={href}
+                class={[
+                  'px-4 py-1.5 rounded-md text-sm transition-colors',
+                  isActive
+                    ? 'text-white font-medium rim-border bg-blue-hour-800'
+                    : 'text-steel-400 hover:text-white hover:bg-white/5',
+                ].join(' ')}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {label}
+              </a>
+            );
+          })}
+        </nav>
+
+        <!-- Mobile menu toggle -->
+        <button
+          id="mobile-menu-btn"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 p-1"
+        >
+          <span class="block h-px w-full bg-steel-300 transition-all duration-300 origin-center" id="bar-top"></span>
+          <span class="block h-px w-full bg-steel-300 transition-all duration-300" id="bar-mid"></span>
+          <span class="block h-px w-full bg-steel-300 transition-all duration-300 origin-center" id="bar-bot"></span>
+        </button>
       </div>
-    </nav>
+
+      <!-- Mobile nav drawer -->
+      <nav
+        id="mobile-menu"
+        class="md:hidden hidden border-t rim-border px-6 py-4 flex flex-col gap-1"
+        aria-label="Mobile navigation"
+      >
+        {navLinks.map(({ href, label }) => {
+          const isActive = href === '/'
+            ? currentPath === '/'
+            : currentPath.startsWith(href);
+          return (
+            <a
+              href={href}
+              class={[
+                'px-4 py-2 rounded-md text-sm transition-colors',
+                isActive
+                  ? 'text-white font-medium rim-border surface-raised'
+                  : 'text-steel-400 hover:text-white hover:bg-white/5',
+              ].join(' ')}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {label}
+            </a>
+          );
+        })}
+      </nav>
+    </header>
 
     <main class="pt-14">
       <slot />
     </main>
 
-    <footer class="rim-border border-t mt-24 py-10 text-center label-caps opacity-40">
+    <footer class="rim-border border-t mt-24 py-10 text-center label-caps opacity-30">
       &copy; {new Date().getFullYear()} Rahul Kumar Ranjan
     </footer>
+
+    <script>
+      const btn = document.getElementById('mobile-menu-btn');
+      const menu = document.getElementById('mobile-menu');
+      const barTop = document.getElementById('bar-top');
+      const barMid = document.getElementById('bar-mid');
+      const barBot = document.getElementById('bar-bot');
+
+      btn?.addEventListener('click', () => {
+        const open = menu?.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', String(open));
+        if (open) {
+          barTop?.classList.add('rotate-45', 'translate-y-[10px]');
+          barMid?.classList.add('opacity-0');
+          barBot?.classList.add('-rotate-45', '-translate-y-[6px]');
+        } else {
+          barTop?.classList.remove('rotate-45', 'translate-y-[10px]');
+          barMid?.classList.remove('opacity-0');
+          barBot?.classList.remove('-rotate-45', '-translate-y-[6px]');
+        }
+      });
+    </script>
   </body>
 </html>

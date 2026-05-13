@@ -1,11 +1,90 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Card from '../components/Card.astro';
+import MermaidDiagram from '../components/MermaidDiagram.astro';
 ---
 
-<Layout title="Work & Systems">
-  <div class="max-w-6xl mx-auto px-6 py-20">
-    <p class="text-xs tracking-widest uppercase text-blue-400 mb-4">Work &amp; Systems</p>
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-50 mb-16">Professional Engagements</h1>
-    <p class="text-gray-500 text-sm">Content coming in Phase 4.</p>
+<Layout
+  title="Work & Systems"
+  description="Professional engagements — InsureDesk, AI Underwriting Engines, and the Mitt Arv biometric platform."
+>
+
+  <!-- ── Page header ───────────────────────────────────────────────────── -->
+  <section class="relative px-6 pt-24 pb-16 overflow-hidden" aria-label="Page header">
+    <div
+      class="pointer-events-none absolute inset-0 -z-10"
+      style="background: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(59,130,246,0.06) 0%, transparent 70%);"
+    ></div>
+    <div class="max-w-6xl mx-auto">
+      <SectionHeader
+        eyebrow="Work & Systems"
+        title="Professional Engagements"
+        description="Building orchestration layers, AI underwriting engines, and identity platforms — end to end."
+      />
+    </div>
+  </section>
+
+  <!-- ── Aspyr AI Labs ─────────────────────────────────────────────────── -->
+  <section id="aspyr" class="px-6 py-20" aria-labelledby="aspyr-heading">
+    <div class="max-w-6xl mx-auto flex flex-col gap-12">
+
+      <div class="grid-asymmetric items-start">
+        <div class="flex flex-col gap-6">
+          <SectionHeader
+            eyebrow="Aspyr AI Labs"
+            title="InsureDesk & AI Underwriting"
+            id="aspyr-heading"
+          />
+          <!-- Populated in Phase 4 -->
+        </div>
+        <div class="flex flex-col gap-6">
+          <!-- Cards populated in Phase 4 -->
+          <Card
+            variant="project"
+            tag="Platform"
+            title="InsureDesk"
+            description="Content coming in Phase 4."
+          />
+        </div>
+      </div>
+
+      <!-- Mermaid diagram placeholder — populated in Phase 4 -->
+      <div id="insuredesk-diagram-slot"></div>
+
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="rim-border border-t"></div>
   </div>
+
+  <!-- ── Mitt Arv ───────────────────────────────────────────────────────── -->
+  <section id="mittarv" class="px-6 py-20" aria-labelledby="mittarv-heading">
+    <div class="max-w-6xl mx-auto flex flex-col gap-12">
+
+      <div class="grid-asymmetric items-start">
+        <div class="flex flex-col gap-6">
+          <SectionHeader
+            eyebrow="Mitt Arv"
+            title="Identity & Behavioral Logic"
+            id="mittarv-heading"
+          />
+        </div>
+        <div class="flex flex-col gap-6">
+          <Card
+            variant="project"
+            tag="Security Layer"
+            title="Biometric Identity System"
+            description="Content coming in Phase 4."
+          />
+        </div>
+      </div>
+
+      <!-- Mermaid diagram placeholder — populated in Phase 4 -->
+      <div id="mittarv-diagram-slot"></div>
+
+    </div>
+  </section>
+
 </Layout>

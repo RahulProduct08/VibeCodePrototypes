@@ -1,11 +1,70 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import ImageContainer from '../components/ImageContainer.astro';
+import Card from '../components/Card.astro';
 ---
 
-<Layout title="The Lab">
-  <div class="max-w-6xl mx-auto px-6 py-20">
-    <p class="text-xs tracking-widest uppercase text-blue-400 mb-4">The Lab</p>
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-50 mb-16">Personal Projects &amp; Experiments</h1>
-    <p class="text-gray-500 text-sm">Content coming in Phase 4.</p>
+<Layout
+  title="The Lab"
+  description="Personal experiments — generative identity synthesis, aesthetic archive, acoustic explorations."
+>
+
+  <!-- ── Page header ───────────────────────────────────────────────────── -->
+  <section class="relative px-6 pt-24 pb-16 overflow-hidden" aria-label="Page header">
+    <div
+      class="pointer-events-none absolute inset-0 -z-10"
+      style="background: radial-gradient(ellipse 60% 40% at 80% 0%, rgba(59,130,246,0.06) 0%, transparent 70%);"
+    ></div>
+    <div class="max-w-6xl mx-auto">
+      <SectionHeader
+        eyebrow="The Lab"
+        title="Personal Projects & Experiments"
+        description="Where identity synthesis, visual aesthetics, and acoustic theory converge."
+      />
+    </div>
+  </section>
+
+  <!-- ── Generative Identity Synthesis ─────────────────────────────────── -->
+  <section id="generative-identity" class="px-6 py-20" aria-labelledby="gen-id-heading">
+    <div class="max-w-6xl mx-auto flex flex-col gap-12">
+      <SectionHeader
+        eyebrow="Project"
+        title="Generative Identity Synthesis"
+        description="Technical process of training AI models to replicate specific facial features and body compositions in real-life locations. Focus on composition, low-angle perspectives, and technical lighting."
+        id="gen-id-heading"
+      />
+      <!-- Content populated in Phase 4 -->
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="rim-border border-t"></div>
   </div>
+
+  <!-- ── Aesthetic & Audio Archive ─────────────────────────────────────── -->
+  <section id="archive" class="px-6 py-20" aria-labelledby="archive-heading">
+    <div class="max-w-6xl mx-auto flex flex-col gap-12">
+
+      <SectionHeader
+        eyebrow="Archive"
+        title="Aesthetic & Audio Archive"
+        description="A vertical 9:16 feed — style, subculture, photography, motion, acoustics."
+        id="archive-heading"
+      />
+
+      <!-- 9:16 vertical masonry feed — placeholder tiles until Phase 4 -->
+      <div class="grid-masonry">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <ImageContainer
+            alt={`Archive tile ${i + 1}`}
+            placeholder={true}
+            label={['Style', 'Motion', 'Acoustics', 'Photography', 'Motion', 'Style'][i]}
+          />
+        ))}
+      </div>
+
+    </div>
+  </section>
+
 </Layout>
