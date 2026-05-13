@@ -19,17 +19,15 @@ const { title, description = 'Rahul Kumar Ranjan — Platform & AI Systems Produ
     <meta name="generator" content={Astro.generator} />
     <title>{title} | Rahul Kumar Ranjan</title>
   </head>
-  <body class="bg-pearl-black text-gray-100 min-h-screen antialiased">
-    <nav class="fixed top-0 inset-x-0 z-50 border-b border-rim-dim backdrop-blur-md bg-pearl-black/80">
+  <body class="min-h-screen antialiased" style="background-color: var(--color-pearl-black); color: var(--color-steel-100);">
+    <nav class="nav-blur rim-border fixed top-0 inset-x-0 z-50 border-b">
       <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <a href="/" class="text-sm font-semibold tracking-widest uppercase text-blue-300 hover:text-blue-200 transition-colors">
-          RKR
-        </a>
-        <div class="flex items-center gap-8 text-sm text-gray-400">
-          <a href="/" class="hover:text-gray-100 transition-colors">Nexus</a>
-          <a href="/work" class="hover:text-gray-100 transition-colors">Work</a>
-          <a href="/lab" class="hover:text-gray-100 transition-colors">Lab</a>
-          <a href="/collab" class="hover:text-gray-100 transition-colors">Collaborate</a>
+        <a href="/" class="label-caps hover:opacity-80 transition-opacity">RKR</a>
+        <div class="flex items-center gap-8 text-sm" style="color: var(--color-steel-400);">
+          <a href="/" class="hover:text-white transition-colors">Nexus</a>
+          <a href="/work" class="hover:text-white transition-colors">Work</a>
+          <a href="/lab" class="hover:text-white transition-colors">Lab</a>
+          <a href="/collab" class="hover:text-white transition-colors">Collaborate</a>
         </div>
       </div>
     </nav>
@@ -38,7 +36,7 @@ const { title, description = 'Rahul Kumar Ranjan — Platform & AI Systems Produ
       <slot />
     </main>
 
-    <footer class="border-t border-rim-dim mt-24 py-10 text-center text-xs text-gray-600 tracking-widest uppercase">
+    <footer class="rim-border border-t mt-24 py-10 text-center label-caps opacity-40">
       &copy; {new Date().getFullYear()} Rahul Kumar Ranjan
     </footer>
   </body>
