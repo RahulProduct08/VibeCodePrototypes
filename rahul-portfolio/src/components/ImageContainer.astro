@@ -1,0 +1,25 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  class?: string;
+}
+
+const { src, alt, caption, class: className = '' } = Astro.props;
+---
+
+<figure class={`relative w-full aspect-[9/16] overflow-hidden rounded-lg rim-card ${className}`}>
+  <img
+    src={src}
+    alt={alt}
+    loading="lazy"
+    decoding="async"
+    class="w-full h-full object-cover"
+  />
+  {caption && (
+    <figcaption class="absolute bottom-0 inset-x-0 p-3 text-xs text-gray-300 bg-gradient-to-t from-black/80 to-transparent">
+      {caption}
+    </figcaption>
+  )}
+</figure>

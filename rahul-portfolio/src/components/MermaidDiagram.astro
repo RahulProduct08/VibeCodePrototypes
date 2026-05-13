@@ -1,0 +1,51 @@
+---
+interface Props {
+  id: string;
+  diagram: string;
+  title?: string;
+}
+
+const { id, diagram, title } = Astro.props;
+---
+
+<div class="mermaid-wrapper rim-card rounded-xl overflow-hidden">
+  {title && (
+    <div class="px-5 py-3 border-b border-rim-dim text-xs font-medium tracking-widest uppercase text-blue-400">
+      {title}
+    </div>
+  )}
+  <div class="p-6 overflow-x-auto">
+    <div id={id} class="mermaid text-sm" data-diagram={diagram}>
+      {diagram}
+    </div>
+  </div>
+</div>
+
+<script>
+  import mermaid from 'mermaid';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#1e3a5f',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#3b82f6',
+      lineColor: '#4b6a9b',
+      secondaryColor: '#0f172a',
+      tertiaryColor: '#1e293b',
+      background: '#0a0f1a',
+      mainBkg: '#0f172a',
+      nodeBorder: '#3b82f6',
+      clusterBkg: '#1e293b',
+      titleColor: '#93c5fd',
+      edgeLabelBackground: '#0f172a',
+      fontFamily: 'ui-monospace, SFMono-Regular, monospace',
+    },
+    flowchart: { curve: 'basis' },
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    mermaid.run({ querySelector: '.mermaid' });
+  });
+</script>

@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --color-pearl-black: #04060d;
+  --color-blue-hour-deep: #0a1628;
+  --color-blue-hour-mid: #0f2042;
+  --color-rim-glow: #3b82f6;
+  --color-rim-dim: rgba(59, 130, 246, 0.15);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', monospace;
+}
+
+/* Rim lighting card effect */
+.rim-card {
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.rim-card:hover {
+  border-color: rgba(59, 130, 246, 0.45);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.08), inset 0 0 20px rgba(59, 130, 246, 0.04);
+}
+
+/* Asymmetric grid utility */
+.grid-asymmetric {
+  display: grid;
+  grid-template-columns: 1fr 1.618fr;
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+@media (max-width: 768px) {
+  .grid-asymmetric {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 9:16 vertical container */
+.aspect-9-16 {
+  aspect-ratio: 9 / 16;
+}
+
+/* Mermaid overrides */
+.mermaid svg {
+  max-width: 100%;
+}
