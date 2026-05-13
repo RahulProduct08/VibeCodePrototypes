@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import Card from '../components/Card.astro';
+import { url } from '../utils/url';
 
 const selectedWork = [
   {
@@ -9,14 +10,14 @@ const selectedWork = [
     title: 'InsureDesk & AI Underwriting Engine',
     description: 'End-to-end insurance workflow platform — annuities, ROTH conversions, FAST policy administration — powered by an AI risk-scoring engine.',
     meta: '2023–Present',
-    href: '/work#aspyr',
+    href: url('/work#aspyr'),
   },
   {
     tag: 'Mitt Arv',
     title: 'Biometric Identity & Behavioral Logic',
     description: 'Multi-modal identity verification system paired with a gamification engine that turned security touch-points into engagement drivers.',
     meta: '2022–2023',
-    href: '/work#mittarv',
+    href: url('/work#mittarv'),
   },
 ];
 ---
@@ -50,7 +51,7 @@ const selectedWork = [
 
       <div class="flex flex-wrap gap-4 pt-2">
         <a
-          href="/work"
+          href={url('/work')}
           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white rim-strong transition-all hover:opacity-90"
           style="background: var(--color-blue-hour-600);"
         >
@@ -60,7 +61,7 @@ const selectedWork = [
           </svg>
         </a>
         <a
-          href="/collab"
+          href={url('/collab')}
           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium rim-border transition-all hover:bg-white/5"
           style="color: var(--color-steel-200);"
         >
@@ -69,7 +70,6 @@ const selectedWork = [
       </div>
     </div>
 
-    <!-- Scroll cue -->
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
       <span class="label-caps" style="font-size: 0.5rem;">Scroll</span>
       <div class="w-px h-8 bg-gradient-to-b from-rim-bright to-transparent"></div>
@@ -77,11 +77,7 @@ const selectedWork = [
   </section>
 
   <!-- ── Identity Pillars ──────────────────────────────────────────────── -->
-  <section
-    id="pillars"
-    class="px-6 py-24"
-    aria-labelledby="pillars-heading"
-  >
+  <section id="pillars" class="px-6 py-24" aria-labelledby="pillars-heading">
     <div class="max-w-6xl mx-auto flex flex-col gap-12">
       <SectionHeader
         eyebrow="Identity"
@@ -91,7 +87,6 @@ const selectedWork = [
       />
 
       <div class="grid md:grid-cols-3 gap-6">
-
         <Card
           variant="pillar"
           tag="01 — Platform"
@@ -130,7 +125,6 @@ const selectedWork = [
             </svg>
           </div>
         </Card>
-
       </div>
     </div>
   </section>
@@ -150,7 +144,7 @@ const selectedWork = [
           id="work-heading"
         />
         <a
-          href="/work"
+          href={url('/work')}
           class="shrink-0 inline-flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
           style="color: var(--color-rim-bright);"
         >
@@ -177,11 +171,7 @@ const selectedWork = [
   </section>
 
   <!-- ── CTA ───────────────────────────────────────────────────────────── -->
-  <section
-    id="cta"
-    class="px-6 py-24"
-    aria-label="Call to action"
-  >
+  <section id="cta" class="px-6 py-24" aria-label="Call to action">
     <div class="max-w-6xl mx-auto grid-asymmetric items-center">
       <SectionHeader
         eyebrow="Collaborate"
@@ -194,7 +184,7 @@ const selectedWork = [
         </p>
         <div class="flex flex-wrap gap-3">
           <a
-            href="/collab"
+            href={url('/collab')}
             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white rim-strong transition-all hover:opacity-90"
             style="background: var(--color-blue-hour-600);"
           >
@@ -204,7 +194,7 @@ const selectedWork = [
             </svg>
           </a>
           <a
-            href="/lab"
+            href={url('/lab')}
             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium rim-border transition-all hover:bg-white/5"
             style="color: var(--color-steel-300);"
           >

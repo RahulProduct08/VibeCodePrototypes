@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { url } from '../utils/url';
 
 interface Props {
   title: string;
@@ -13,13 +14,14 @@ const {
   ogImage = '/og-default.png',
 } = Astro.props;
 
-const currentPath = Astro.url.pathname;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const currentPath = (Astro.url.pathname.replace(base, '') || '/');
 
 const navLinks = [
-  { href: '/',       label: 'Nexus'       },
-  { href: '/work',   label: 'Work'        },
-  { href: '/lab',    label: 'Lab'         },
-  { href: '/collab', label: 'Collaborate' },
+  { local: '/',       href: url('/'),       label: 'Nexus'       },
+  { local: '/work',   href: url('/work'),   label: 'Work'        },
+  { local: '/lab',    href: url('/lab'),    label: 'Lab'         },
+  { local: '/collab', href: url('/collab'), label: 'Collaborate' },
 ];
 ---
 
@@ -40,20 +42,17 @@ const navLinks = [
   </head>
 
   <body>
-    <!-- Navigation -->
     <header class="nav-blur rim-border fixed top-0 inset-x-0 z-50 border-b">
       <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <!-- Wordmark -->
-        <a href="/" aria-label="Home" class="label-caps hover:opacity-70 transition-opacity">
+        <a href={url('/')} aria-label="Home" class="label-caps hover:opacity-70 transition-opacity">
           RKR
         </a>
 
-        <!-- Desktop nav -->
         <nav class="hidden md:flex items-center gap-1" aria-label="Primary">
-          {navLinks.map(({ href, label }) => {
-            const isActive = href === '/'
+          {navLinks.map(({ local, href, label }) => {
+            const isActive = local === '/'
               ? currentPath === '/'
-              : currentPath.startsWith(href);
+              : currentPath.startsWith(local);
             return (
               <a
                 href={href}
@@ -71,7 +70,6 @@ const navLinks = [
           })}
         </nav>
 
-        <!-- Mobile menu toggle -->
         <button
           id="mobile-menu-btn"
           aria-label="Toggle menu"
@@ -85,16 +83,15 @@ const navLinks = [
         </button>
       </div>
 
-      <!-- Mobile nav drawer -->
       <nav
         id="mobile-menu"
         class="md:hidden hidden border-t rim-border px-6 py-4 flex flex-col gap-1"
         aria-label="Mobile navigation"
       >
-        {navLinks.map(({ href, label }) => {
-          const isActive = href === '/'
+        {navLinks.map(({ local, href, label }) => {
+          const isActive = local === '/'
             ? currentPath === '/'
-            : currentPath.startsWith(href);
+            : currentPath.startsWith(local);
           return (
             <a
               href={href}
