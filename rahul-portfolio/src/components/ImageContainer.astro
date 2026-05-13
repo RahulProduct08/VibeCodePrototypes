@@ -4,6 +4,7 @@ interface Props {
   alt: string;
   caption?: string;
   label?: string;
+  seed?: string;
   placeholder?: boolean;
   class?: string;
 }
@@ -13,55 +14,31 @@ const {
   alt,
   caption,
   label,
+  seed,
   placeholder = false,
   class: className = '',
 } = Astro.props;
 
-const showPlaceholder = placeholder || !src;
+const imgSeed = seed ?? alt.toLowerCase().replace(/[^a-z0-9]/g, '-').slice(0, 24);
+const picsumSrc = `https://picsum.photos/seed/${imgSeed}/405/720`;
+const finalSrc = (!placeholder && src) ? src : picsumSrc;
 ---
 
-<figure class={`relative w-full aspect-9-16 rim-card overflow-hidden rounded-xl ${className}`}>
+<figure class={`relative w-full aspect-9-16 rim-card img-zoom overflow-hidden rounded-xl ${className}`}>
+  <img
+    src={finalSrc}
+    alt={alt}
+    loading="lazy"
+    decoding="async"
+    class="w-full h-full object-cover"
+  />
 
-  {showPlaceholder ? (
-    <!-- Placeholder: Blue Hour gradient with grid overlay -->
-    <div
-      class="w-full h-full gradient-blue-hour flex items-center justify-center"
-      aria-label={alt}
-      role="img"
-    >
-      <div
-        class="absolute inset-0 opacity-10"
-        style="background-image: linear-gradient(rgba(59,130,246,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.4) 1px, transparent 1px); background-size: 40px 40px;"
-      ></div>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="text-blue-hour-300 opacity-40"
-        aria-hidden="true"
-      >
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <polyline points="21 15 16 10 5 21"/>
-      </svg>
-    </div>
-  ) : (
-    <img
-      src={src}
-      alt={alt}
-      loading="lazy"
-      decoding="async"
-      class="w-full h-full object-cover"
-    />
-  )}
+  <!-- Gradient overlay — always present for legibility -->
+  <div
+    class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none"
+  ></div>
 
-  <!-- Label tag (top-left overlay) -->
+  <!-- Label tag (top-left) -->
   {label && (
     <div class="absolute top-3 left-3 px-2 py-1 rounded-md text-xs font-medium tracking-wide bg-pearl-black/70 backdrop-blur-sm border rim-border text-steel-200">
       {label}
@@ -70,7 +47,7 @@ const showPlaceholder = placeholder || !src;
 
   <!-- Caption (bottom overlay) -->
   {caption && (
-    <figcaption class="absolute bottom-0 inset-x-0 px-4 py-3 text-xs leading-relaxed text-steel-200 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+    <figcaption class="absolute bottom-0 inset-x-0 px-4 py-4 text-xs leading-relaxed text-steel-200">
       {caption}
     </figcaption>
   )}
