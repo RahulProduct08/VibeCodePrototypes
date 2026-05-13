@@ -3,6 +3,46 @@ import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import Card from '../components/Card.astro';
 import MermaidDiagram from '../components/MermaidDiagram.astro';
+
+const insuredeskDiagram = `flowchart TD
+    A([Agent / Broker]) --> B[InsureDesk Portal]
+    B --> C{Select Product}
+    C -->|Annuity| D[Annuity Intake]
+    C -->|Life / Term| E[Life Policy Intake]
+    C -->|ROTH Conversion| F[ROTH Conversion Flow]
+    D --> G[Document Collection]
+    E --> G
+    F --> G
+    G --> H[AI Underwriting Engine]
+    H --> I{Risk Score}
+    I -->|Low Risk| J[Auto-Approve]
+    I -->|Medium Risk| K[Underwriter Queue]
+    I -->|High Risk| L[Decline or Refer]
+    J --> M[FAST Policy Admin]
+    K --> N[Manual Review]
+    N --> M
+    M --> O[Policy Issuance]
+    O --> P[Client Portal]
+    P --> Q[Ongoing Admin]`;
+
+const mittarvDiagram = `flowchart TD
+    A([New User]) --> B[Enrollment Flow]
+    B --> C{Biometric Capture}
+    C -->|Face Scan| D[Face Vector Store]
+    C -->|Fingerprint| E[Ridge Hash Store]
+    C -->|Behavioral| F[Interaction Baseline]
+    D --> G[Identity Profile]
+    E --> G
+    F --> G
+    G --> H[Continuous Auth Engine]
+    H --> I{Confidence Score}
+    I -->|High 95+| J[Full Access]
+    I -->|Medium 70-94| K[Step-Up Challenge]
+    I -->|Low below 70| L[Session Lock]
+    J --> M[Gamification Engine]
+    M --> N{Behavioral Logic}
+    N -->|Engagement Streak| O[Reward Token]
+    N -->|Anomaly Detected| P[Security Alert]`;
 ---
 
 <Layout
@@ -14,7 +54,7 @@ import MermaidDiagram from '../components/MermaidDiagram.astro';
   <section class="relative px-6 pt-24 pb-16 overflow-hidden" aria-label="Page header">
     <div
       class="pointer-events-none absolute inset-0 -z-10"
-      style="background: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(59,130,246,0.06) 0%, transparent 70%);"
+      style="background: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(59,130,246,0.07) 0%, transparent 70%);"
     ></div>
     <div class="max-w-6xl mx-auto">
       <SectionHeader
@@ -27,62 +67,139 @@ import MermaidDiagram from '../components/MermaidDiagram.astro';
 
   <!-- ── Aspyr AI Labs ─────────────────────────────────────────────────── -->
   <section id="aspyr" class="px-6 py-20" aria-labelledby="aspyr-heading">
-    <div class="max-w-6xl mx-auto flex flex-col gap-12">
+    <div class="max-w-6xl mx-auto flex flex-col gap-14">
 
+      <!-- Context header -->
       <div class="grid-asymmetric items-start">
         <div class="flex flex-col gap-6">
           <SectionHeader
-            eyebrow="Aspyr AI Labs"
+            eyebrow="Aspyr AI Labs · 2023–Present"
             title="InsureDesk & AI Underwriting"
             id="aspyr-heading"
+            description="Building the configurable platform layer that transforms opaque insurance processes into auditable, orchestrated workflows."
           />
-          <!-- Populated in Phase 4 -->
+          <ul class="flex flex-col gap-2 text-sm text-steel-400">
+            <li class="flex items-start gap-2">
+              <span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-rim-bright"></span>
+              Mapped 40+ annuity and life policy edge cases into a unified intake schema, eliminating 3 legacy paper forms.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-rim-bright"></span>
+              Designed the AI Underwriting Engine's risk-scoring rubric: FICO inputs, medical flags, and product-specific riders.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-rim-bright"></span>
+              Integrated FAST policy administration as the downstream execution layer for auto-approved cases.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-rim-bright"></span>
+              Reduced average quote-to-bind time from 11 days to under 48 hours for standard-risk profiles.
+            </li>
+          </ul>
         </div>
-        <div class="flex flex-col gap-6">
-          <!-- Cards populated in Phase 4 -->
+
+        <!-- Stat + detail cards -->
+        <div class="flex flex-col gap-4">
+          <div class="grid grid-cols-2 gap-4">
+            <Card variant="stat" tag="Efficiency" title="Quote-to-Bind" number="48h" />
+            <Card variant="stat" tag="Coverage" title="Policy Types" number="12+" />
+          </div>
           <Card
             variant="project"
-            tag="Platform"
+            tag="Core Product"
             title="InsureDesk"
-            description="Content coming in Phase 4."
+            description="A configurable SaaS portal for insurance agents handling annuities, life policies, and ROTH conversions. Built around a dynamic form engine that adapts to product type, applicant profile, and jurisdictional rules in real time."
+          />
+          <Card
+            variant="project"
+            tag="AI Engine"
+            title="AI Underwriting Engine"
+            description="LLM-assisted risk assessment layer trained on carrier guidelines. Classifies applications into auto-approve, manual review, or decline tracks, feeding results directly into the FAST policy administration system."
+          />
+          <Card
+            variant="project"
+            tag="Workflow"
+            title="ROTH Conversion Orchestrator"
+            description="Multi-step workflow covering tax implication surfacing, contribution limit validation, and handoff to the client's custodian — all within a single guided session."
           />
         </div>
       </div>
 
-      <!-- Mermaid diagram placeholder — populated in Phase 4 -->
-      <div id="insuredesk-diagram-slot"></div>
+      <!-- InsureDesk Mermaid diagram -->
+      <MermaidDiagram
+        id="insuredesk-diagram"
+        title="InsureDesk — End-to-End Workflow"
+        diagram={insuredeskDiagram}
+      />
 
     </div>
   </section>
 
+  <!-- Divider -->
   <div class="max-w-6xl mx-auto px-6">
-    <div class="rim-border border-t"></div>
+    <div class="rim-border border-t opacity-50"></div>
   </div>
 
   <!-- ── Mitt Arv ───────────────────────────────────────────────────────── -->
   <section id="mittarv" class="px-6 py-20" aria-labelledby="mittarv-heading">
-    <div class="max-w-6xl mx-auto flex flex-col gap-12">
+    <div class="max-w-6xl mx-auto flex flex-col gap-14">
 
+      <!-- Context header -->
       <div class="grid-asymmetric items-start">
         <div class="flex flex-col gap-6">
           <SectionHeader
-            eyebrow="Mitt Arv"
+            eyebrow="Mitt Arv · 2022–2023"
             title="Identity & Behavioral Logic"
             id="mittarv-heading"
+            description="Implementing a multi-modal biometric security layer and a gamification engine that drives sustained engagement through behavioral incentives."
           />
+          <ul class="flex flex-col gap-2 text-sm text-steel-400">
+            <li class="flex items-start gap-2">
+              <span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-rim-bright"></span>
+              Defined the biometric enrollment flow: face vector extraction, fingerprint ridge hashing, and behavioral baseline capture.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-rim-bright"></span>
+              Designed a continuous authentication confidence model — three-tier response: full access, step-up challenge, session lock.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-rim-bright"></span>
+              Built the gamification logic engine: streak tracking, reward token issuance, and anomaly-triggered security nudges.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-rim-bright"></span>
+              Achieved 34% increase in weekly active users within 60 days of gamification rollout.
+            </li>
+          </ul>
         </div>
-        <div class="flex flex-col gap-6">
+
+        <!-- Stat + detail cards -->
+        <div class="flex flex-col gap-4">
+          <div class="grid grid-cols-2 gap-4">
+            <Card variant="stat" tag="Engagement" title="WAU Lift" number="+34%" />
+            <Card variant="stat" tag="Auth" title="Confidence Threshold" number="95%" />
+          </div>
           <Card
             variant="project"
             tag="Security Layer"
             title="Biometric Identity System"
-            description="Content coming in Phase 4."
+            description="Multi-modal identity verification combining face vectors, fingerprint ridge hashes, and passive behavioral signals. The continuous auth engine re-scores sessions every 90 seconds without interrupting the user experience."
+          />
+          <Card
+            variant="project"
+            tag="Behavioral Logic Engine"
+            title="Gamification System"
+            description="Engagement loop built on streak mechanics, milestone rewards, and behavioral anomaly detection. Rewards are issued as on-platform tokens; anomalies trigger contextual security prompts rather than hard blocks."
           />
         </div>
       </div>
 
-      <!-- Mermaid diagram placeholder — populated in Phase 4 -->
-      <div id="mittarv-diagram-slot"></div>
+      <!-- Mitt Arv Mermaid diagram -->
+      <MermaidDiagram
+        id="mittarv-diagram"
+        title="Mitt Arv — Biometric Identity & Gamification Architecture"
+        diagram={mittarvDiagram}
+      />
 
     </div>
   </section>

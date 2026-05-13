@@ -3,6 +3,69 @@ import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import ImageContainer from '../components/ImageContainer.astro';
 import Card from '../components/Card.astro';
+
+const archiveTiles = [
+  {
+    label: 'Style — Industrial Goth',
+    caption: 'High-contrast silhouettes, structured outerwear, matte black hardware. The aesthetic of controlled severity.',
+  },
+  {
+    label: 'Photography — Blue Hour',
+    caption: 'Narrow window between civil and nautical twilight. Deep indigo sky, cool-temperature artificial light.',
+  },
+  {
+    label: 'Style — Balletcore',
+    caption: 'Satin, tulle, and pointed silhouettes recontextualized in street and editorial compositions.',
+  },
+  {
+    label: 'Motion — Cinematic Rim',
+    caption: 'Automotive and motorcycle subjects lit with a single hard source behind. Edge separation, negative space.',
+  },
+  {
+    label: 'Style — Y2K',
+    caption: 'Millennial chrome, iridescent surfaces, and low-rise proportions recoded through a current lens.',
+  },
+  {
+    label: 'Acoustics — Composition',
+    caption: 'Layered drone, modal harmony, and room resonance. Treating architecture as an instrument.',
+  },
+  {
+    label: 'Style — Bandhgala',
+    caption: 'The double-breasted bandhgala as a study in structured restraint — South Asian tailoring, global silhouette.',
+  },
+  {
+    label: 'Photography — Automotive Noir',
+    caption: 'Wet asphalt, low perspective, available-light reflections. Machines as subjects of formal photography.',
+  },
+];
+
+const processSteps = [
+  {
+    number: '01',
+    title: 'Reference Collection',
+    description: 'Curating a structured dataset of reference material — controlled lighting, consistent angle, varied expression.',
+  },
+  {
+    number: '02',
+    title: 'Feature Extraction',
+    description: 'Identifying key facial geometry, skin tone distribution, and body proportion ratios as anchor parameters.',
+  },
+  {
+    number: '03',
+    title: 'Model Fine-Tuning',
+    description: 'LoRA-based fine-tuning on a base diffusion model, targeting feature fidelity over stylistic generalization.',
+  },
+  {
+    number: '04',
+    title: 'Scene Composition',
+    description: 'Low-angle perspectives, rim-lit environments, and real-location depth cues for photorealistic grounding.',
+  },
+  {
+    number: '05',
+    title: 'Synthesis & Iteration',
+    description: 'Multi-pass generation with inpainting passes for consistency across a sequence of distinct environments.',
+  },
+];
 ---
 
 <Layout
@@ -14,7 +77,7 @@ import Card from '../components/Card.astro';
   <section class="relative px-6 pt-24 pb-16 overflow-hidden" aria-label="Page header">
     <div
       class="pointer-events-none absolute inset-0 -z-10"
-      style="background: radial-gradient(ellipse 60% 40% at 80% 0%, rgba(59,130,246,0.06) 0%, transparent 70%);"
+      style="background: radial-gradient(ellipse 60% 40% at 80% 0%, rgba(59,130,246,0.07) 0%, transparent 70%);"
     ></div>
     <div class="max-w-6xl mx-auto">
       <SectionHeader
@@ -28,38 +91,74 @@ import Card from '../components/Card.astro';
   <!-- ── Generative Identity Synthesis ─────────────────────────────────── -->
   <section id="generative-identity" class="px-6 py-20" aria-labelledby="gen-id-heading">
     <div class="max-w-6xl mx-auto flex flex-col gap-12">
-      <SectionHeader
-        eyebrow="Project"
-        title="Generative Identity Synthesis"
-        description="Technical process of training AI models to replicate specific facial features and body compositions in real-life locations. Focus on composition, low-angle perspectives, and technical lighting."
-        id="gen-id-heading"
-      />
-      <!-- Content populated in Phase 4 -->
+
+      <div class="grid-asymmetric items-start">
+        <SectionHeader
+          eyebrow="Project — Ongoing"
+          title="Generative Identity Synthesis"
+          id="gen-id-heading"
+          description="Training AI models to replicate specific facial features and body compositions in real-life locations. The technical focus is on composition fidelity, low-angle perspectives, and cinematic rim lighting — not stylization."
+        />
+        <div class="flex flex-col gap-3 text-sm text-steel-400">
+          <p class="leading-relaxed">
+            Most identity-synthesis work optimizes for aesthetics. This project optimizes for
+            <em class="text-steel-200 not-italic">spatial and physical plausibility</em> — the subject
+            should appear to genuinely inhabit the environment, not be composited into it.
+          </p>
+          <p class="leading-relaxed">
+            Key parameters: camera perspective geometry, ambient vs. key light ratio,
+            ground-plane contact, and cast shadow consistency.
+          </p>
+        </div>
+      </div>
+
+      <!-- Process step cards -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        {processSteps.map(({ number, title, description }) => (
+          <Card
+            variant="stat"
+            tag={`Step ${number}`}
+            title={title}
+            description={description}
+            number={number}
+          />
+        ))}
+      </div>
+
     </div>
   </section>
 
+  <!-- Divider -->
   <div class="max-w-6xl mx-auto px-6">
-    <div class="rim-border border-t"></div>
+    <div class="rim-border border-t opacity-50"></div>
   </div>
 
   <!-- ── Aesthetic & Audio Archive ─────────────────────────────────────── -->
   <section id="archive" class="px-6 py-20" aria-labelledby="archive-heading">
     <div class="max-w-6xl mx-auto flex flex-col gap-12">
 
-      <SectionHeader
-        eyebrow="Archive"
-        title="Aesthetic & Audio Archive"
-        description="A vertical 9:16 feed — style, subculture, photography, motion, acoustics."
-        id="archive-heading"
-      />
+      <div class="grid-asymmetric items-end">
+        <SectionHeader
+          eyebrow="Archive"
+          title="Aesthetic & Audio Archive"
+          id="archive-heading"
+          description="A 9:16 vertical feed — style subculture, Blue Hour photography, cinematic motion, acoustic composition."
+        />
+        <p class="text-sm text-steel-500 leading-relaxed">
+          Industrial Goth · Y2K · Balletcore · Bandhgala<br />
+          Blue Hour · Rim Lighting · Automotive Noir<br />
+          Modal Acoustics · Room Resonance
+        </p>
+      </div>
 
-      <!-- 9:16 vertical masonry feed — placeholder tiles until Phase 4 -->
+      <!-- 9:16 vertical masonry feed -->
       <div class="grid-masonry">
-        {Array.from({ length: 6 }).map((_, i) => (
+        {archiveTiles.map(({ label, caption }) => (
           <ImageContainer
-            alt={`Archive tile ${i + 1}`}
+            alt={label}
             placeholder={true}
-            label={['Style', 'Motion', 'Acoustics', 'Photography', 'Motion', 'Style'][i]}
+            label={label}
+            caption={caption}
           />
         ))}
       </div>
