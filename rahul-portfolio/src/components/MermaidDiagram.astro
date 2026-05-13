@@ -22,7 +22,7 @@ const { id, diagram, title } = Astro.props;
 </div>
 
 <script>
-  import mermaid from 'mermaid';
+  const { default: mermaid } = await import('mermaid');
 
   mermaid.initialize({
     startOnLoad: false,
