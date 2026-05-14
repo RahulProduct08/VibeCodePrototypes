@@ -42,6 +42,37 @@ const timeline = [
   },
 ];
 
+const hobbies = [
+  {
+    title: 'Generative Identity Synthesis',
+    description: 'Training diffusion models to place subjects in real-world locations with spatial plausibility — correct perspective geometry, ambient vs. key light ratio, and cast shadow consistency. Optimising for physical believability, not aesthetics.',
+    tags: ['LoRA Fine-tuning', 'Inpainting', 'Rim Lighting', 'Low-Angle Composition'],
+    href: url('/lab#generative-identity'),
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>`,
+  },
+  {
+    title: 'Photography & Cinematic Lighting',
+    description: 'Blue Hour timing — the narrow window between civil and nautical twilight. Deep indigo sky, cool artificial sources, wet asphalt reflections. Automotive subjects lit with a single hard source from behind: edge separation, negative space, available light.',
+    tags: ['Blue Hour', 'Automotive Noir', 'Rim Lighting', 'Available Light'],
+    href: url('/lab#archive'),
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>`,
+  },
+  {
+    title: 'Fashion & Aesthetic Subcultures',
+    description: 'Industrial Goth, Balletcore, Y2K Chrome, Bandhgala tailoring. Studying subculture not as trend but as a system of visual grammar — how silhouette, material, and proportion encode identity across contexts.',
+    tags: ['Industrial Goth', 'Y2K', 'Balletcore', 'Bandhgala'],
+    href: url('/lab#archive'),
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  },
+  {
+    title: 'Acoustic Theory & Composition',
+    description: 'Layered drone, modal harmony, and room resonance. Treating architecture as an instrument — the reverb tail of a space carries as much information as the note itself. Composition as a spatial and structural problem.',
+    tags: ['Modal Harmony', 'Drone', 'Room Resonance', 'Composition'],
+    href: url('/lab'),
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+  },
+];
+
 const capabilities = [
   { tag: '01', title: 'Platform Architecture', desc: 'Configurable CRUD systems, dynamic form engines, and intake schemas that scale with complex business logic.' },
   { tag: '02', title: 'AI Systems Design', desc: 'LLM-assisted workflows, risk-scoring rubrics, and human-AI handoff patterns for enterprise decision systems.' },
@@ -229,6 +260,58 @@ const capabilities = [
           </div>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- ── Beyond Work ─────────────────────────────────────────────────── -->
+  <section id="beyond" class="px-6 py-20" aria-labelledby="beyond-heading">
+    <div class="max-w-5xl mx-auto flex flex-col gap-12">
+
+      <div class="reveal">
+        <SectionHeader
+          eyebrow="Beyond Work"
+          title="What else I do."
+          description="The projects and obsessions that run parallel to the day job — explored further in the Lab."
+          id="beyond-heading"
+        />
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-5">
+        {hobbies.map(({ title, description, tags, href, icon }, i) => (
+          <a
+            href={href}
+            class={`reveal reveal-d${i + 1} rim-card rounded-2xl p-6 surface-raised flex flex-col gap-4 group`}
+            style="text-decoration: none;"
+          >
+            <!-- Icon -->
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+              style="background: rgba(59,130,246,0.10); border: 1px solid rgba(59,130,246,0.18); color: var(--color-rim-bright);"
+              set:html={icon}
+            />
+
+            <!-- Text -->
+            <div class="flex flex-col gap-2 flex-1">
+              <h3 style="font-size: 1rem; font-weight: 700; color: var(--color-steel-100); line-height: 1.3; transition: color 0.2s;">
+                {title}
+                <svg class="inline-block ml-1 opacity-0 group-hover:opacity-60 transition-opacity -translate-y-px" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              </h3>
+              <p style="font-size: 0.78rem; line-height: 1.7; color: var(--color-steel-500);">
+                {description}
+              </p>
+            </div>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              {tags.map((t) => (
+                <span style="font-size: 0.55rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; border: 1px solid rgba(59,130,246,0.16); color: var(--color-steel-600); background: rgba(59,130,246,0.04);">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+
     </div>
   </section>
 
