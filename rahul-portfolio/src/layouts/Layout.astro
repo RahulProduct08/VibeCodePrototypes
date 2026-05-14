@@ -19,7 +19,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentPath = Astro.url.pathname.replace(base, '') || '/';
 
 const navLinks = [
-  { local: '/',       href: url('/'),       label: 'Nexus'       },
+  { local: '/',       href: url('/'),       label: 'Home'       },
   { local: '/work',   href: url('/work'),   label: 'Work'        },
   { local: '/notes',  href: url('/notes'),  label: 'Notes'       },
   { local: '/lab',    href: url('/lab'),    label: 'Lab'         },
