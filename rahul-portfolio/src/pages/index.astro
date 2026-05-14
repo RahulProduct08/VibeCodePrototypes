@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import Card from '../components/Card.astro';
+import HeroComposition from '../components/HeroComposition';
 import { url } from '../utils/url';
 
 const selectedWork = [
@@ -27,110 +28,92 @@ const selectedWork = [
   <!-- ── Hero ──────────────────────────────────────────────────────────── -->
   <section
     id="hero"
-    class="relative min-h-[92vh] flex flex-col justify-center px-6 overflow-hidden"
+    class="relative min-h-[94vh] flex flex-col justify-center px-6 overflow-hidden"
     aria-label="Hero"
   >
-    <!-- Animated background orbs -->
+    <!-- Background atmosphere -->
     <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
       <div
-        class="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full"
-        style="background: radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 65%); animation: pulseGlow 8s ease-in-out infinite;"
+        class="absolute -top-40 left-1/3 -translate-x-1/2 w-[800px] h-[800px] rounded-full"
+        style="background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 65%); animation: pulseGlow 9s ease-in-out infinite;"
       ></div>
       <div
-        class="absolute top-1/3 -right-64 w-[500px] h-[500px] rounded-full float float-d1"
-        style="background: radial-gradient(circle, rgba(30,64,110,0.25) 0%, transparent 65%);"
+        class="absolute top-1/4 -right-64 w-[600px] h-[600px] rounded-full float float-d1"
+        style="background: radial-gradient(circle, rgba(30,64,110,0.20) 0%, transparent 65%);"
       ></div>
       <div
-        class="absolute bottom-0 -left-48 w-[400px] h-[400px] rounded-full float-slow float-d2"
-        style="background: radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 65%);"
+        class="absolute bottom-0 -left-48 w-[500px] h-[500px] rounded-full float-slow float-d2"
+        style="background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 65%);"
       ></div>
-      <!-- Subtle grid pattern -->
+      <!-- Dot grid -->
       <div
-        class="absolute inset-0 opacity-[0.025]"
-        style="background-image: linear-gradient(rgba(96,165,250,1) 1px, transparent 1px), linear-gradient(90deg, rgba(96,165,250,1) 1px, transparent 1px); background-size: 60px 60px;"
+        class="absolute inset-0 opacity-[0.022]"
+        style="background-image: linear-gradient(rgba(96,165,250,1) 1px, transparent 1px), linear-gradient(90deg, rgba(96,165,250,1) 1px, transparent 1px); background-size: 56px 56px;"
       ></div>
     </div>
 
-    <div class="max-w-6xl mx-auto w-full py-24 grid md:grid-cols-[1fr_auto] gap-12 items-center">
-      <!-- Text block -->
-      <div class="flex flex-col gap-8">
-        <p class="label-caps hero-eyebrow">Platform &amp; AI Systems Product Manager</p>
+    <div class="max-w-6xl mx-auto w-full py-20 grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-        <h1 class="display-xl max-w-3xl">
-          <span class="block hero-line-1">Rahul Kumar Ranjan —</span>
-          <span class="block hero-line-2" style="color: var(--color-rim-bright);">Building the Orchestration Layer</span>
-          <span class="block hero-line-2" style="animation-delay: 0.42s;">for AI &amp; Enterprise.</span>
+      <!-- ── Editorial text column ─────────────────────────────────────── -->
+      <div class="flex flex-col gap-8 md:py-8">
+        <p class="label-caps hero-eyebrow" style="letter-spacing: 0.22em;">
+          Platform &amp; AI Systems — Product Manager
+        </p>
+
+        <h1 class="display-hero hero-line-1">
+          <span class="block">Building</span>
+          <span class="block" style="color: var(--color-rim-bright);">the Orchestration</span>
+          <span class="block hero-line-2" style="animation-delay: 0.42s;">Layer.</span>
         </h1>
 
-        <p class="body-lead max-w-xl hero-desc">
-          Product Manager focused on configurable platforms, workflow abstraction,
-          and bridging complex business logic with AI-enabled systems.
+        <p class="body-lead max-w-md hero-desc" style="font-size: 1rem; line-height: 1.8;">
+          Configurable platforms, workflow abstraction, and AI-enabled
+          decision systems — from insurance intake to biometric identity.
         </p>
 
         <div class="flex flex-wrap gap-4 hero-cta">
           <a
             href={url('/work')}
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white rim-strong transition-all hover:scale-105"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-white rim-strong transition-all hover:scale-105"
             style="background: var(--color-blue-hour-600);"
           >
             View Work
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
           <a
-            href={url('/collab')}
+            href={url('/notes')}
             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium rim-border transition-all hover:bg-white/5 hover:scale-105"
             style="color: var(--color-steel-200);"
           >
-            Collaborate
+            Read Notes
           </a>
+        </div>
+
+        <!-- Micro-stats row -->
+        <div class="hero-cta flex items-center gap-8 pt-2" style="animation-delay: 0.80s;">
+          {[
+            { value: '48h', label: 'Quote-to-bind' },
+            { value: '+34%', label: 'WAU lift' },
+            { value: '12+', label: 'Policy types' },
+          ].map(({ value, label }) => (
+            <div class="flex flex-col gap-1">
+              <span style="font-size: 1.2rem; font-weight: 800; color: var(--color-steel-100); letter-spacing: -0.02em;">{value}</span>
+              <span style="font-size: 0.58rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-steel-600);">{label}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      <!-- Animated node-graph visual -->
-      <div class="hidden md:block hero-visual float" style="width: 260px; animation-duration: 7s;">
-        <svg viewBox="0 0 260 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Connection lines (draw-in) -->
-          <line x1="130" y1="50"  x2="65"  y2="130" stroke="rgba(96,165,250,0.35)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 1.2s var(--ease-snappy) 0.6s both;" />
-          <line x1="130" y1="50"  x2="195" y2="130" stroke="rgba(96,165,250,0.35)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 1.2s var(--ease-snappy) 0.8s both;" />
-          <line x1="65"  y1="130" x2="45"  y2="230" stroke="rgba(96,165,250,0.25)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 1.0s var(--ease-snappy) 1.0s both;" />
-          <line x1="65"  y1="130" x2="130" y2="210" stroke="rgba(96,165,250,0.25)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 1.0s var(--ease-snappy) 1.1s both;" />
-          <line x1="195" y1="130" x2="130" y2="210" stroke="rgba(96,165,250,0.25)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 1.0s var(--ease-snappy) 1.2s both;" />
-          <line x1="195" y1="130" x2="215" y2="230" stroke="rgba(96,165,250,0.25)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 1.0s var(--ease-snappy) 1.3s both;" />
-          <line x1="45"  y1="230" x2="90"  y2="340" stroke="rgba(96,165,250,0.18)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 0.9s var(--ease-snappy) 1.4s both;" />
-          <line x1="130" y1="210" x2="90"  y2="340" stroke="rgba(96,165,250,0.18)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 0.9s var(--ease-snappy) 1.5s both;" />
-          <line x1="130" y1="210" x2="170" y2="340" stroke="rgba(96,165,250,0.18)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 0.9s var(--ease-snappy) 1.6s both;" />
-          <line x1="215" y1="230" x2="170" y2="340" stroke="rgba(96,165,250,0.18)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 0.9s var(--ease-snappy) 1.7s both;" />
-          <line x1="90"  y1="340" x2="130" y2="400" stroke="rgba(96,165,250,0.12)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 0.8s var(--ease-snappy) 1.8s both;" />
-          <line x1="170" y1="340" x2="130" y2="400" stroke="rgba(96,165,250,0.12)" stroke-width="1" pathLength="1" style="stroke-dasharray:1; stroke-dashoffset:1; animation: drawLine 0.8s var(--ease-snappy) 1.9s both;" />
-
-          <!-- Glow rings on hub node -->
-          <circle cx="130" cy="50" r="22" fill="rgba(59,130,246,0.06)" style="animation: pulseGlow 3s ease-in-out infinite;" />
-          <circle cx="130" cy="50" r="14" fill="rgba(59,130,246,0.10)" style="animation: pulseGlow 3s ease-in-out 0.5s infinite;" />
-
-          <!-- Nodes (draw after lines) -->
-          <circle cx="130" cy="50"  r="8" fill="rgba(96,165,250,0.95)"  style="filter: drop-shadow(0 0 8px rgba(96,165,250,0.8)); animation: pulseDot 2.5s ease-in-out infinite 0.0s;" />
-          <circle cx="65"  cy="130" r="5" fill="rgba(96,165,250,0.80)"  style="filter: drop-shadow(0 0 6px rgba(96,165,250,0.6)); animation: pulseDot 2.5s ease-in-out infinite 0.3s;" />
-          <circle cx="195" cy="130" r="5" fill="rgba(96,165,250,0.80)"  style="filter: drop-shadow(0 0 6px rgba(96,165,250,0.6)); animation: pulseDot 2.5s ease-in-out infinite 0.6s;" />
-          <circle cx="45"  cy="230" r="4" fill="rgba(96,165,250,0.60)"  style="animation: pulseDot 2.5s ease-in-out infinite 0.9s;" />
-          <circle cx="130" cy="210" r="6" fill="rgba(96,165,250,0.85)"  style="filter: drop-shadow(0 0 5px rgba(96,165,250,0.5)); animation: pulseDot 2.5s ease-in-out infinite 1.2s;" />
-          <circle cx="215" cy="230" r="4" fill="rgba(96,165,250,0.60)"  style="animation: pulseDot 2.5s ease-in-out infinite 1.5s;" />
-          <circle cx="90"  cy="340" r="4" fill="rgba(96,165,250,0.50)"  style="animation: pulseDot 2.5s ease-in-out infinite 1.8s;" />
-          <circle cx="170" cy="340" r="4" fill="rgba(96,165,250,0.50)"  style="animation: pulseDot 2.5s ease-in-out infinite 2.1s;" />
-          <circle cx="130" cy="400" r="3" fill="rgba(96,165,250,0.35)"  style="animation: pulseDot 2.5s ease-in-out infinite 2.4s;" />
-
-          <!-- Labels -->
-          <text x="144" y="46" font-size="7" fill="rgba(96,165,250,0.7)" font-family="monospace">platform</text>
-          <text x="28"  y="126" font-size="6" fill="rgba(96,165,250,0.5)" font-family="monospace">auth</text>
-          <text x="200" y="126" font-size="6" fill="rgba(96,165,250,0.5)" font-family="monospace">ai</text>
-          <text x="138" y="207" font-size="6" fill="rgba(96,165,250,0.5)" font-family="monospace">core</text>
-        </svg>
+      <!-- ── Floating composition column ──────────────────────────────── -->
+      <div class="hidden md:block hero-visual" style="animation-delay: 0.15s;">
+        <HeroComposition client:load />
       </div>
     </div>
 
     <!-- Scroll cue -->
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 hero-scroll">
       <span class="label-caps opacity-30" style="font-size: 0.5rem;">Scroll</span>
-      <div class="w-px h-8 bg-gradient-to-b from-rim-bright to-transparent opacity-30"></div>
+      <div class="w-px h-8 bg-gradient-to-b from-blue-400 to-transparent opacity-30"></div>
     </div>
   </section>
 

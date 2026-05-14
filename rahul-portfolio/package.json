@@ -12,9 +12,14 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^5.0.5",
+    "@fontsource-variable/inter-tight": "^5.2.7",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.3.2",
+    "framer-motion": "^12.38.0",
     "mermaid": "^11.15.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
