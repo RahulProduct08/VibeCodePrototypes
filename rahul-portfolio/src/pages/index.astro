@@ -5,106 +5,118 @@ import Card from '../components/Card.astro';
 import HeroComposition from '../components/HeroComposition';
 import { url } from '../utils/url';
 
-const selectedWork = [
+const timeline = [
   {
-    tag: 'Aspyr AI Labs',
-    title: 'InsureDesk & AI Underwriting Engine',
-    description: 'End-to-end insurance workflow platform — annuities, ROTH conversions, FAST policy administration — powered by an AI risk-scoring engine.',
-    meta: '2023–Present',
-    href: url('/work#aspyr'),
+    period: '2023 – Present',
+    company: 'Aspyr AI Labs',
+    role: 'Platform & AI Systems — Product Manager',
+    description: 'Leading product for InsureDesk, a configurable SaaS portal for insurance agents handling annuities, life policies, and ROTH conversions. Designed and shipped the AI Underwriting Engine — an LLM-assisted risk-scoring system trained on carrier guidelines.',
+    highlights: [
+      'Mapped 40+ annuity and life policy edge cases into a unified intake schema, eliminating 3 legacy paper forms.',
+      'Designed the AI risk-scoring rubric: FICO inputs, medical flags, and product-specific riders.',
+      'Integrated FAST policy administration as the downstream execution layer for auto-approved cases.',
+      'Reduced quote-to-bind from 11 days to under 48h for standard-risk profiles.',
+    ],
+    tags: ['InsureDesk', 'AI Underwriting', 'FAST Admin', 'Workflow Orchestration'],
+    metric: { value: '48h', label: 'Quote-to-bind' },
+    accentFull: 'rgba(59,130,246,0.70)',
+    accentMid:  'rgba(59,130,246,0.22)',
+    accentDim:  'rgba(59,130,246,0.25)',
   },
   {
-    tag: 'Mitt Arv',
-    title: 'Biometric Identity & Behavioral Logic',
-    description: 'Multi-modal identity verification system paired with a gamification engine that turned security touch-points into engagement drivers.',
-    meta: '2022–2023',
-    href: url('/work#mittarv'),
+    period: '2022 – 2023',
+    company: 'Mitt Arv',
+    role: 'Product Manager — Identity & Behavioral Systems',
+    description: 'Owned the biometric identity and gamification product layers. Defined the multi-modal enrollment flow, the continuous authentication confidence model, and the behavioral incentive engine that drove measurable engagement lift.',
+    highlights: [
+      'Defined biometric enrollment flow: face vector extraction, fingerprint ridge hashing, behavioral baseline.',
+      'Designed a continuous auth confidence model — three-tier response: full access, step-up, session lock.',
+      'Built the gamification logic engine: streak tracking, reward token issuance, anomaly-triggered security nudges.',
+      'Achieved 34% increase in weekly active users within 60 days of gamification rollout.',
+    ],
+    tags: ['Biometric Identity', 'Continuous Auth', 'Gamification', 'Behavioral Logic'],
+    metric: { value: '+34%', label: 'WAU in 60 days' },
+    accentFull: 'rgba(96,165,250,0.65)',
+    accentMid:  'rgba(96,165,250,0.18)',
+    accentDim:  'rgba(96,165,250,0.22)',
   },
+];
+
+const capabilities = [
+  { tag: '01', title: 'Platform Architecture', desc: 'Configurable CRUD systems, dynamic form engines, and intake schemas that scale with complex business logic.' },
+  { tag: '02', title: 'AI Systems Design', desc: 'LLM-assisted workflows, risk-scoring rubrics, and human-AI handoff patterns for enterprise decision systems.' },
+  { tag: '03', title: 'Identity & Auth', desc: 'Multi-modal biometric enrollment, continuous trust scoring, and behavioral anomaly detection.' },
+  { tag: '04', title: 'Workflow Orchestration', desc: 'End-to-end process mapping, decision routing, and integration with downstream execution layers.' },
 ];
 ---
 
-<Layout title="Nexus" description="Rahul Kumar Ranjan — Building the Orchestration Layer for AI & Enterprise.">
+<Layout
+  title="Rahul Kumar Ranjan"
+  description="Rahul Kumar Ranjan — Platform & AI Systems Product Manager. Building configurable workflows, AI underwriting engines, and identity platforms."
+>
 
   <!-- ── Hero ──────────────────────────────────────────────────────────── -->
-  <section
-    id="hero"
-    class="relative min-h-[94vh] flex flex-col justify-center px-6 overflow-hidden"
-    aria-label="Hero"
-  >
+  <section id="hero" class="relative min-h-[94vh] flex flex-col justify-center px-6 overflow-hidden" aria-label="Introduction">
+
     <!-- Background atmosphere -->
     <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      <div
-        class="absolute -top-40 left-1/3 -translate-x-1/2 w-[800px] h-[800px] rounded-full"
-        style="background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 65%); animation: pulseGlow 9s ease-in-out infinite;"
-      ></div>
-      <div
-        class="absolute top-1/4 -right-64 w-[600px] h-[600px] rounded-full float float-d1"
-        style="background: radial-gradient(circle, rgba(30,64,110,0.20) 0%, transparent 65%);"
-      ></div>
-      <div
-        class="absolute bottom-0 -left-48 w-[500px] h-[500px] rounded-full float-slow float-d2"
-        style="background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 65%);"
-      ></div>
-      <!-- Dot grid -->
-      <div
-        class="absolute inset-0 opacity-[0.022]"
-        style="background-image: linear-gradient(rgba(96,165,250,1) 1px, transparent 1px), linear-gradient(90deg, rgba(96,165,250,1) 1px, transparent 1px); background-size: 56px 56px;"
-      ></div>
+      <div class="absolute -top-40 left-1/3 -translate-x-1/2 w-[800px] h-[800px] rounded-full"
+        style="background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 65%); animation: pulseGlow 9s ease-in-out infinite;"></div>
+      <div class="absolute top-1/4 -right-64 w-[600px] h-[600px] rounded-full float float-d1"
+        style="background: radial-gradient(circle, rgba(30,64,110,0.20) 0%, transparent 65%);"></div>
+      <div class="absolute bottom-0 -left-48 w-[500px] h-[500px] rounded-full float-slow float-d2"
+        style="background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 65%);"></div>
+      <div class="absolute inset-0 opacity-[0.022]"
+        style="background-image: linear-gradient(rgba(96,165,250,1) 1px, transparent 1px), linear-gradient(90deg, rgba(96,165,250,1) 1px, transparent 1px); background-size: 56px 56px;"></div>
     </div>
 
     <div class="max-w-6xl mx-auto w-full py-20 grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-      <!-- ── Editorial text column ─────────────────────────────────────── -->
-      <div class="flex flex-col gap-8 md:py-8">
-        <p class="label-caps hero-eyebrow" style="letter-spacing: 0.22em;">
-          Platform &amp; AI Systems — Product Manager
-        </p>
+      <!-- Text column -->
+      <div class="flex flex-col gap-7 md:py-8">
+        <p class="label-caps hero-eyebrow" style="letter-spacing: 0.22em;">Platform &amp; AI Systems — Product Manager</p>
 
-        <h1 class="display-hero hero-line-1">
-          <span class="block">Building</span>
-          <span class="block" style="color: var(--color-rim-bright);">the Orchestration</span>
-          <span class="block hero-line-2" style="animation-delay: 0.42s;">Layer.</span>
+        <h1 class="hero-line-1" style="font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 800; line-height: 1.02; letter-spacing: -0.03em; color: var(--color-steel-50);">
+          Rahul<br />
+          <span style="color: var(--color-rim-bright);">Kumar</span><br />
+          Ranjan.
         </h1>
 
-        <p class="body-lead max-w-md hero-desc" style="font-size: 1rem; line-height: 1.8;">
-          Configurable platforms, workflow abstraction, and AI-enabled
-          decision systems — from insurance intake to biometric identity.
+        <p class="body-lead max-w-md hero-desc" style="font-size: 1rem; line-height: 1.85;">
+          I build configurable platforms and AI-enabled systems —
+          turning opaque enterprise processes into auditable, orchestrated workflows.
         </p>
 
         <div class="flex flex-wrap gap-4 hero-cta">
-          <a
-            href={url('/work')}
+          <a href={url('/work')}
             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-white rim-strong transition-all hover:scale-105"
-            style="background: var(--color-blue-hour-600);"
-          >
+            style="background: var(--color-blue-hour-600);">
             View Work
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
-          <a
-            href={url('/notes')}
+          <a href={url('/collab')}
             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium rim-border transition-all hover:bg-white/5 hover:scale-105"
-            style="color: var(--color-steel-200);"
-          >
-            Read Notes
+            style="color: var(--color-steel-200);">
+            Work Together
           </a>
         </div>
 
-        <!-- Micro-stats row -->
+        <!-- Quick stats -->
         <div class="hero-cta flex items-center gap-8 pt-2" style="animation-delay: 0.80s;">
           {[
-            { value: '48h', label: 'Quote-to-bind' },
-            { value: '+34%', label: 'WAU lift' },
+            { value: '3+', label: 'Years PM' },
+            { value: '2',  label: 'Platforms shipped' },
             { value: '12+', label: 'Policy types' },
           ].map(({ value, label }) => (
             <div class="flex flex-col gap-1">
-              <span style="font-size: 1.2rem; font-weight: 800; color: var(--color-steel-100); letter-spacing: -0.02em;">{value}</span>
+              <span style="font-size: 1.25rem; font-weight: 800; color: var(--color-steel-100); letter-spacing: -0.02em;">{value}</span>
               <span style="font-size: 0.58rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-steel-600);">{label}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <!-- ── Floating composition column ──────────────────────────────── -->
+      <!-- Floating composition -->
       <div class="hidden md:block hero-visual" style="animation-delay: 0.15s;">
         <HeroComposition client:load />
       </div>
@@ -117,91 +129,103 @@ const selectedWork = [
     </div>
   </section>
 
-  <!-- ── Identity Pillars ──────────────────────────────────────────────── -->
-  <section id="pillars" class="px-6 py-24" aria-labelledby="pillars-heading">
-    <div class="max-w-6xl mx-auto flex flex-col gap-12">
+  <!-- ── Career Timeline ───────────────────────────────────────────────── -->
+  <section id="experience" class="px-6 py-24" aria-labelledby="experience-heading">
+    <div class="max-w-5xl mx-auto flex flex-col gap-16">
+
       <div class="reveal">
         <SectionHeader
-          eyebrow="Identity"
-          title="Three pillars of practice."
-          description="The lenses through which every product decision is made."
-          id="pillars-heading"
+          eyebrow="Experience"
+          title="Career timeline."
+          description="Two platforms, end to end — from intake schema to AI decision engine to biometric identity."
+          id="experience-heading"
         />
       </div>
 
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="reveal reveal-d1">
-          <Card
-            variant="pillar"
-            tag="01 — Platform"
-            title="Platform Thinking"
-            description="Designing scalable data management, CRUD systems, and intuitive UI/UX flows that serve as the foundation for composable products."
-          >
-            <div slot="icon" class="w-10 h-10 rounded-lg rim-border flex items-center justify-center mb-1" style="background: rgba(59,130,246,0.12);">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-rim-bright);" aria-hidden="true">
-                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-              </svg>
-            </div>
-          </Card>
-        </div>
+      <div class="relative flex flex-col gap-0">
+        <!-- Spine line (desktop) -->
+        <div class="hidden md:block absolute left-[148px] top-4 bottom-8 w-px"
+          style="background: linear-gradient(to bottom, rgba(59,130,246,0.45), rgba(59,130,246,0.08));"></div>
 
-        <div class="reveal reveal-d2">
-          <Card
-            variant="pillar"
-            tag="02 — AI"
-            title="AI Synthesis & Prototyping"
-            description="Utilizing React prototypes and generative models for precise workflow logic, identity replication, and AI-enabled decision systems."
-          >
-            <div slot="icon" class="w-10 h-10 rounded-lg rim-border flex items-center justify-center mb-1" style="background: rgba(59,130,246,0.12);">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-rim-bright);" aria-hidden="true">
-                <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-              </svg>
-            </div>
-          </Card>
-        </div>
+        {timeline.map(({ period, company, role, description, highlights, tags, metric, accentFull, accentMid, accentDim }, i) => (
+          <div class={`reveal reveal-d${i + 1} relative flex flex-col md:flex-row gap-6 md:gap-10 pb-16 last:pb-0`}>
 
-        <div class="reveal reveal-d3">
-          <Card
-            variant="pillar"
-            tag="03 — Theory"
-            title="Cross-Domain Theory"
-            description="Exploring the intersection of philosophy, acoustics, and visual aesthetics to fuel unconventional product creativity and systems thinking."
-          >
-            <div slot="icon" class="w-10 h-10 rounded-lg rim-border flex items-center justify-center mb-1" style="background: rgba(59,130,246,0.12);">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-rim-bright);" aria-hidden="true">
-                <path d="M2 20h20M4 20V10l8-8 8 8v10"/>
-              </svg>
+            <!-- Date column + spine dot (desktop) -->
+            <div class="hidden md:flex flex-col items-end gap-3 shrink-0 w-36 pt-1">
+              <span style={`font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-steel-600); font-family: var(--font-mono); line-height: 1.4;`}>
+                {period}
+              </span>
+              <div style={`width: 10px; height: 10px; border-radius: 50%; background: ${accentFull}; box-shadow: 0 0 12px ${accentFull}; margin-right: -6px;`}></div>
             </div>
-          </Card>
-        </div>
+
+            <!-- Entry card -->
+            <div class="flex-1 rounded-2xl p-6 lg:p-7"
+              style={`background: rgba(10,15,26,0.55); border: 1px solid ${accentMid};`}>
+
+              <!-- Mobile period label -->
+              <span class="md:hidden label-caps block mb-3">{period}</span>
+
+              <!-- Header -->
+              <div class="flex items-start justify-between gap-4 mb-4 flex-wrap">
+                <div>
+                  <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--color-steel-50); letter-spacing: -0.01em; line-height: 1.2;">
+                    {company}
+                  </h3>
+                  <p style="font-size: 0.78rem; color: var(--color-steel-500); margin-top: 3px;">{role}</p>
+                </div>
+                <div class="shrink-0 text-right">
+                  <p style={`font-size: 1.6rem; font-weight: 800; color: ${accentFull}; letter-spacing: -0.02em; line-height: 1;`}>
+                    {metric.value}
+                  </p>
+                  <p style="font-size: 0.52rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-steel-600); margin-top: 2px;">
+                    {metric.label}
+                  </p>
+                </div>
+              </div>
+
+              <div style="height: 1px; background: rgba(59,130,246,0.10); margin-bottom: 16px;"></div>
+
+              <p class="text-sm leading-relaxed mb-5" style="color: var(--color-steel-400);">{description}</p>
+
+              <!-- Impact bullets -->
+              <ul class="flex flex-col gap-2 mb-5">
+                {highlights.map((h) => (
+                  <li class="flex items-start gap-2.5 text-sm" style="color: var(--color-steel-500);">
+                    <span class="mt-[7px] shrink-0 w-1.5 h-1.5 rounded-full" style={`background: ${accentFull};`}></span>
+                    {h}
+                  </li>
+                ))}
+              </ul>
+
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-2">
+                {tags.map((t) => (
+                  <span style={`font-size: 0.58rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; border: 1px solid ${accentDim}; color: var(--color-steel-500); background: rgba(59,130,246,0.05);`}>
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- ── Selected Work ─────────────────────────────────────────────────── -->
-  <section
-    id="selected-work"
-    class="px-6 py-24"
+  <!-- ── Capabilities ──────────────────────────────────────────────────── -->
+  <section id="capabilities" class="px-6 py-20"
     style="background: linear-gradient(to bottom, transparent, var(--color-pearl-900) 20%, var(--color-pearl-900) 80%, transparent);"
-    aria-labelledby="work-heading"
-  >
-    <div class="max-w-6xl mx-auto flex flex-col gap-12">
-      <div class="reveal flex items-end justify-between gap-6 flex-wrap">
-        <SectionHeader eyebrow="Selected Work" title="Systems built, shipped, and measured." id="work-heading" />
-        <a
-          href={url('/work')}
-          class="shrink-0 inline-flex items-center gap-1.5 text-sm font-medium transition-all hover:opacity-70 hover:gap-2.5"
-          style="color: var(--color-rim-bright);"
-        >
-          Full case studies
-          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
+    aria-labelledby="cap-heading">
+    <div class="max-w-5xl mx-auto flex flex-col gap-12">
+      <div class="reveal">
+        <SectionHeader eyebrow="Capabilities" title="What I bring to a product." id="cap-heading" />
       </div>
-
-      <div class="grid md:grid-cols-2 gap-6">
-        {selectedWork.map(({ tag, title, description, meta, href }, i) => (
-          <div class={`reveal reveal-d${i + 1}`}>
-            <Card variant="project" tag={tag} title={title} description={description} meta={meta} href={href} />
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {capabilities.map(({ tag, title, desc }, i) => (
+          <div class={`reveal reveal-d${i + 1} rim-card rounded-xl p-5 surface-raised flex flex-col gap-3`}>
+            <span class="label-caps">{tag}</span>
+            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-steel-100); line-height: 1.3;">{title}</h3>
+            <p style="font-size: 0.78rem; line-height: 1.65; color: var(--color-steel-500);">{desc}</p>
           </div>
         ))}
       </div>
@@ -210,9 +234,9 @@ const selectedWork = [
 
   <!-- ── CTA ───────────────────────────────────────────────────────────── -->
   <section id="cta" class="px-6 py-24" aria-label="Call to action">
-    <div class="max-w-6xl mx-auto grid-asymmetric items-center">
+    <div class="max-w-5xl mx-auto grid-asymmetric items-center">
       <div class="reveal-left">
-        <SectionHeader eyebrow="Collaborate" title="Reach out for doubts, lessons, or collaborations." />
+        <SectionHeader eyebrow="Let's talk" title="Open to the right collaboration." />
       </div>
       <div class="reveal reveal-d2 flex flex-col gap-5">
         <p class="body-lead">
@@ -220,20 +244,16 @@ const selectedWork = [
           If you're building something ambitious, let's talk.
         </p>
         <div class="flex flex-wrap gap-3">
-          <a
-            href={url('/collab')}
+          <a href={url('/collab')}
             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white rim-strong transition-all hover:scale-105 hover:opacity-90"
-            style="background: var(--color-blue-hour-600);"
-          >
+            style="background: var(--color-blue-hour-600);">
             See collaboration tiers
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
-          <a
-            href={url('/lab')}
+          <a href={url('/work')}
             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium rim-border transition-all hover:bg-white/5 hover:scale-105"
-            style="color: var(--color-steel-300);"
-          >
-            Explore the Lab
+            style="color: var(--color-steel-300);">
+            See the work
           </a>
         </div>
       </div>
